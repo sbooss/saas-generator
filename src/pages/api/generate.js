@@ -309,6 +309,68 @@ function typographyAgentEnhance(html, config) {
   return html.replace('</head>', css + '\n</head>');
 }
 
+// ========== PARALLAX AGENT ==========
+function parallaxAgentEnhance(html, config) {
+  const p = config.primaryColor || '#6366f1';
+  const s = config.secondaryColor || '#8b5cf6';
+  
+  const parallaxCss = [
+    '<style>',
+    'html{scroll-behavior:smooth}',
+    '.hero{position:relative;overflow:hidden}',
+    '.hero::before{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at center,' + p + '15 0%,transparent 70%);animation:parallaxFloat 20s ease-in-out infinite;pointer-events:none;z-index:0}',
+    '.hero::after{content:"";position:absolute;bottom:-30%;right:-30%;width:150%;height:150%;background:radial-gradient(ellipse at center,' + s + '10 0%,transparent 70%);animation:parallaxFloat2 25s ease-in-out infinite;pointer-events:none;z-index:0}',
+    '@keyframes parallaxFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(5%,-3%) scale(1.05)}50%{transform:translate(-3%,5%) scale(.95)}75%{transform:translate(-5%,-2%) scale(1.02)}}',
+    '@keyframes parallaxFloat2{0%,100%{transform:translate(0,0) rotate(0deg)}33%{transform:translate(-4%,3%) rotate(2deg)}66%{transform:translate(3%,-4%) rotate(-1deg)}}',
+    '.reveal{opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.4,0,.2,1)}.reveal.active{opacity:1;transform:translateY(0)}',
+    '.reveal-left{opacity:0;transform:translateX(-60px);transition:all .8s cubic-bezier(.4,0,.2,1)}.reveal-left.active{opacity:1;transform:translateX(0)}',
+    '.reveal-right{opacity:0;transform:translateX(60px);transition:all .8s cubic-bezier(.4,0,.2,1)}.reveal-right.active{opacity:1;transform:translateX(0)}',
+    '.reveal-scale{opacity:0;transform:scale(.8);transition:all .8s cubic-bezier(.4,0,.2,1)}.reveal-scale.active{opacity:1;transform:scale(1)}',
+    '.stagger-children>*{opacity:0;transform:translateY(30px);transition:all .6s cubic-bezier(.4,0,.2,1)}',
+    '.stagger-children.active>*:nth-child(1){transition-delay:.1s;opacity:1;transform:translateY(0)}',
+    '.stagger-children.active>*:nth-child(2){transition-delay:.2s;opacity:1;transform:translateY(0)}',
+    '.stagger-children.active>*:nth-child(3){transition-delay:.3s;opacity:1;transform:translateY(0)}',
+    '.stagger-children.active>*:nth-child(4){transition-delay:.4s;opacity:1;transform:translateY(0)}',
+    '.text-parallax{will-change:transform;transition:transform .1s linear}',
+    '.gradient-parallax{background:linear-gradient(135deg,' + p + '20,' + s + '20,' + p + '20);background-size:400% 400%;animation:gradientShift 15s ease infinite}',
+    '@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}',
+    '.float-element{animation:floatUpDown 6s ease-in-out infinite}',
+    '.float-element:nth-child(2){animation-delay:-2s}.float-element:nth-child(3){animation-delay:-4s}',
+    '@keyframes floatUpDown{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}',
+    '.mouse-parallax{transition:transform .3s ease-out}',
+    '.section-divider{position:relative;height:100px;overflow:hidden}',
+    '.section-divider::before{content:"";position:absolute;top:0;left:-10%;width:120%;height:100%;background:linear-gradient(135deg,' + p + '10,transparent,' + s + '10);transform:skewY(-2deg)}',
+    '@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}',
+    '</style>'
+  ].join('\n');
+  
+  const jsLines = [
+    '<script>',
+    '(function(){',
+    'var ro=new IntersectionObserver(function(e){e.forEach(function(t){if(t.isIntersecting)t.target.classList.add("active")})},{threshold:.1,rootMargin:"0px 0px -50px 0px"});',
+    'document.querySelectorAll(".reveal,.reveal-left,.reveal-right,.reveal-scale,.stagger-children").forEach(function(e){ro.observe(e)});',
+    'var tk=false;',
+    'window.addEventListener("scroll",function(){if(!tk){window.requestAnimationFrame(function(){',
+    'var sy=window.pageYOffset;',
+    'var h=document.querySelector(".hero");',
+    'if(h){var hc=h.querySelector("div");if(hc){hc.style.transform="translateY("+(sy*.3)+"px)";hc.style.opacity=1-(sy/800)}}',
+    'document.querySelectorAll(".text-parallax").forEach(function(e){var sp=parseFloat(e.dataset.speed)||.5;var r=e.getBoundingClientRect();var c=r.top+r.height/2;var o=(window.innerHeight/2-c)*sp*.1;e.style.transform="translateY("+o+"px)"});',
+    'tk=false});tk=true}});',
+    'document.addEventListener("mousemove",function(e){var mx=(e.clientX/window.innerWidth-.5)*2;var my=(e.clientY/window.innerHeight-.5)*2;document.querySelectorAll(".mouse-parallax").forEach(function(e){var d=parseFloat(e.dataset.depth)||20;e.style.transform="translate("+(mx*d)+"px,"+(my*d)+"px)"})});',
+    'document.querySelectorAll(".feature-card").forEach(function(e,i){e.classList.add("reveal");e.style.transitionDelay=(i*.1)+"s"});',
+    'document.querySelectorAll(".testimonial-card").forEach(function(e){e.classList.add("reveal-scale")});',
+    'document.querySelectorAll("[id=\"contato\"] > div").forEach(function(e){e.classList.add("reveal")});',
+    'document.querySelectorAll("a[href^=\"#\"]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();var t=document.querySelector(this.getAttribute("href"));if(t)t.scrollIntoView({behavior:"smooth",block:"start"})})});',
+    'setTimeout(function(){window.dispatchEvent(new Event("scroll"))},100);',
+    '})();',
+    '<\/script>'
+  ].join('\n');
+  
+  let enhanced = html.replace('</head>', parallaxCss + '\n</head>');
+  enhanced = enhanced.replace('</body>', jsLines + '\n</body>');
+  return enhanced;
+}
+
 function qaValidate(html, config) {
   const checks = [];
   checks.push({n:'HTML', p: html.includes('<!DOCTYPE html>') && html.includes('lang="pt-BR"')});
@@ -392,6 +454,7 @@ Responda APENAS com JSON valido (sem markdown, sem crases) no formato:
   result.html = uxAgentEnhance(result.html, config);
   result.html = scrollAgentEnhance(result.html, config);
   result.html = typographyAgentEnhance(result.html, config);
+  result.html = parallaxAgentEnhance(result.html, config);
   
   // QA Validation
   const qaResult = qaValidate(result.html, config);
