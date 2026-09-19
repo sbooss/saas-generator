@@ -494,8 +494,27 @@ Responda APENAS com JSON valido (sem markdown):
 
     // Extrair nome (primeira linha ou palavras significativas)
     const nameMatch = description.match(/^(.*?)(?:\.|,|\n|$)/i);
-    let businessName = nameMatch ? nameMatch[1].trim() : 'Meu Negocio';
-    if (businessName.length > 50) businessName = businessName.substring(0, 50);
+    let rawName = nameMatch ? nameMatch[1].trim() : 'Meu Negocio';
+    
+    // Limpar nome - remover palavras desnecessarias
+    rawName = rawName.replace(/clinica medica chamada/gi, '')
+                     .replace(/empresa chamada/gi, '')
+                     .replace(/negocio chamado/gi, '')
+                     .replace(/loja chamada/gi, '')
+                     .replace(/restaurante chamado/gi, '')
+                     .replace(/escritorio chamado/gi, '')
+                     .replace(/escola chamada/gi, '')
+                     .replace(/academia chamada/gi, '')
+                     .replace(/salao chamado/gi, '')
+                     .replace(/consultorio chamado/gi, '')
+                     .trim();
+    
+    // Se ainda esta muito longo, pegar so as palavras principais
+    let businessName = rawName;
+    if (businessName.length > 40) {
+      businessName = businessName.split(' ').slice(0, 4).join(' ');
+    }
+    if (!businessName || businessName.length < 2) businessName = 'Meu Negocio';
 
     extracted = {
       businessName,

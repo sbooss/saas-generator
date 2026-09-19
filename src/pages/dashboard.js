@@ -12,6 +12,8 @@ export default function Dashboard() {
   const [previewPage, setPreviewPage] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [description, setDescription] = useState('');
+  const [phone, setPhone] = useState('');
+  const [instagram, setInstagram] = useState('');
 
   useEffect(() => {
     const saved = localStorage.getItem('saas_current_user');
@@ -25,10 +27,11 @@ export default function Dashboard() {
     if (!description.trim()) { alert('Descreva como voce quer sua pagina'); return; }
     setGenerating(true);
     try {
+      const fullDescription = description + (phone ? '. Telefone: ' + phone : '') + (instagram ? '. Instagram: ' + instagram : '');
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description })
+        body: JSON.stringify({ description: fullDescription })
       });
       const data = await response.json();
       if (data.success) {
@@ -44,6 +47,8 @@ export default function Dashboard() {
         localStorage.setItem('saas_pages', JSON.stringify(updated));
         setShowGenerator(false);
         setDescription('');
+        setPhone('');
+        setInstagram('');
         setPreviewPage(newPage);
         setShowPreview(true);
       } else {
@@ -122,23 +127,35 @@ export default function Dashboard() {
             {showGenerator && (
               <div className={styles.generator}>
                 <h3 style={{marginTop:0,marginBottom:'8px',fontSize:'20px',fontWeight:700,color:'#fff'}}>Criar Landing Page</h3>
-                <p style={{color:'#888',fontSize:'14px',marginBottom:'20px',lineHeight:'1.6'}}>Escreva tudo que voce quer: nome do negocio, estilo, cores, o que deve ter na pagina, telefone, endereco, instagram... Quanto mais detalhes, melhor o resultado.</p>
+                <p style={{color:'#888',fontSize:'14px',marginBottom:'20px',lineHeight:'1.6'}}>Descreva como voce quer sua pagina. A IA entende e cria tudo para voce.</p>
 
-                <div className={styles.formGroup} style={{marginBottom:'24px'}}>
+                <div className={styles.formGroup} style={{marginBottom:'16px'}}>
+                  <label style={{display:'block',marginBottom:'8px',fontSize:'13px',color:'#999'}}>Como voce quer a pagina? *</label>
                   <textarea
-                    rows={8}
+                    rows={6}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder={"Exemplo:\n\nClinica medica chamada Vida Plena. Quero uma pagina elegante e dourada com fundo escuro. O titulo principal deve ser sobre saude preventiva. Preciso de 4 secoes: beneficios, equipe medica, depoimentos de pacientes e contato. Meu telefone e (11) 99999-9999, endereco na Rua das Flores 123 em Sao Paulo. Instagram @vidaplena. WhatsApp 11999999999. Quero um botao verde de WhatsApp e um rosa para Instagram."}
-                    style={{resize:'vertical',minHeight:'200px',width:'100%',padding:'16px',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'12px',color:'#fff',fontSize:'14px',lineHeight:'1.7',fontFamily:'Inter, sans-serif'}}
+                    placeholder={"Exemplo:\n\nClinica medica elegante dourada com fundo escuro. Quero secoes de beneficios, equipe medica, depoimentos e contato."}
+                    style={{resize:'vertical',width:'100%',padding:'14px',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'12px',color:'#fff',fontSize:'14px',lineHeight:'1.6',fontFamily:'Inter, sans-serif'}}
                   />
+                </div>
+
+                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px',marginBottom:'24px'}}>
+                  <div className={styles.formGroup}>
+                    <label style={{display:'block',marginBottom:'8px',fontSize:'13px',color:'#999'}}>Telefone</label>
+                    <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="(11) 99999-9999" style={{width:'100%',padding:'12px 14px',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'10px',color:'#fff',fontSize:'14px'}} />
+                  </div>
+                  <div className={styles.formGroup}>
+                    <label style={{display:'block',marginBottom:'8px',fontSize:'13px',color:'#999'}}>Instagram</label>
+                    <input type="text" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="@seuusuario" style={{width:'100%',padding:'12px 14px',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'10px',color:'#fff',fontSize:'14px'}} />
+                  </div>
                 </div>
 
                 <div className={styles.formActions}>
                   <button className={styles.primary} onClick={handleGenerate} disabled={generating}>
                     {generating ? 'Gerando sua pagina...' : 'Gerar Landing Page'}
                   </button>
-                  <button className={styles.secondary} onClick={() => { setShowGenerator(false); setDescription(''); }}>Cancelar</button>
+                  <button className={styles.secondary} onClick={() => { setShowGenerator(false); setDescription(''); setPhone(''); setInstagram(''); }}>Cancelar</button>
                 </div>
               </div>
             )}
