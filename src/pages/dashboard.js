@@ -69,14 +69,31 @@ export default function Dashboard() {
       <div className={styles.container}>
         {showPreview && previewPage && (
           <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,background:'#000',zIndex:1000,display:'flex',flexDirection:'column'}}>
-            <div style={{background:'rgba(10,10,10,0.95)',borderBottom:'1px solid rgba(255,255,255,0.1)',padding:'12px 24px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-              <span style={{color:'#fff',fontWeight:600}}>Preview: {previewPage.name}</span>
-              <div style={{display:'flex',gap:'12px'}}>
-                <a href={'data:text/html;charset=utf-8,' + encodeURIComponent(previewPage.html)} download={previewPage.name + '.html'} style={{background:'linear-gradient(135deg,#6366f1,#8b5cf6)',color:'#fff',padding:'8px 16px',borderRadius:'8px',fontSize:'13px',fontWeight:600,textDecoration:'none',cursor:'pointer'}}>Baixar HTML</a>
-                <button onClick={() => setShowPreview(false)} style={{background:'rgba(255,255,255,0.1)',color:'#fff',border:'1px solid rgba(255,255,255,0.2)',padding:'8px 16px',borderRadius:'8px',fontSize:'13px',cursor:'pointer'}}>Fechar</button>
+            <div style={{background:'rgba(10,10,10,0.95)',borderBottom:'1px solid rgba(255,255,255,0.1)',padding:'12px 24px',display:'flex',justifyContent:'space-between',alignItems:'center',flexShrink:0}}>
+              <div style={{display:'flex',alignItems:'center',gap:'16px'}}>
+                <span style={{color:'#fff',fontWeight:600,fontSize:'15px'}}>{previewPage.name}</span>
+                <span style={{color:'#666',fontSize:'13px',textTransform:'capitalize'}}>{previewPage.niche}</span>
+                <span style={{color:'#444',fontSize:'12px'}}>{previewPage.created}</span>
+              </div>
+              <div style={{display:'flex',gap:'10px',alignItems:'center'}}>
+                <button onClick={() => {
+                  const blob = new Blob([previewPage.html], {type:'text/html'});
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = previewPage.name.replace(/\s+/g, '_') + '.html';
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }} style={{background:'linear-gradient(135deg,#22c55e,#16a34a)',color:'#fff',border:'none',padding:'10px 20px',borderRadius:'10px',fontSize:'13px',fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',gap:'6px'}}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Baixar HTML
+                </button>
+                <button onClick={() => setShowPreview(false)} style={{background:'rgba(255,255,255,0.08)',color:'#999',border:'1px solid rgba(255,255,255,0.1)',padding:'10px 16px',borderRadius:'10px',fontSize:'13px',cursor:'pointer'}}>
+                  Fechar Preview
+                </button>
               </div>
             </div>
-            <iframe srcDoc={previewPage.html} style={{flex:1,border:'none',width:'100%',height:'100%'}} title="Preview" />
+            <iframe srcDoc={previewPage.html} style={{flex:1,border:'none',width:'100%',height:'100%',background:'#fff'}} title="Preview" sandbox="allow-scripts" />
           </div>
         )}
         <header className={styles.header}>
