@@ -40,8 +40,7 @@ export default function SuperLanding() {
         </div>
         <div className={styles.heroContent}>
           <div className={`${styles.badge} ${styles.animateIn}`}>
-            <span className={styles.badgeDot}></span>
-            Novo: IA Generativa para Landing Pages
+            Plataforma de Landing Pages Profissionais
           </div>
           <h1 className={`${styles.heroTitle} ${styles.animateIn} ${styles.delay1}`}>
             Crie Landing Pages que <br />

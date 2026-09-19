@@ -1,53 +1,99 @@
-import json
-import time
-import os
-from datetime import datetime
-
-from sales_agent import SalesAgent
-from content_agent import ContentAgent
-from support_agent import SupportAgent
-from financial_agent import FinancialAgent
-
+from ui_agent import UIAgent
+from ux_agent import UXAgent
+from scroll_agent import ScrollAgent
+from typography_agent import TypographyAgent
+from qa_agent import QAAgent
 
 class Orchestrator:
+    """Orquestrador que coordena todos os agentes especializados"""
+    
     def __init__(self):
         self.agents = {
-            'sales': SalesAgent(),
-            'content': ContentAgent(),
-            'support': SupportAgent(),
-            'financial': FinancialAgent()
+            'ui': UIAgent(),
+            'ux': UXAgent(),
+            'scroll': ScrollAgent(),
+            'typography': TypographyAgent(),
+            'qa': QAAgent()
         }
-        self.status = 'idle'
-        self.start_time = None
-
-    def log(self, msg):
-        ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"[{ts}] [ORCHESTRATOR] {msg}")
-
-    def start(self):
-        self.log("=== ORQUESTRADOR INICIADO ===")
-        self.status = 'running'
-        self.start_time = datetime.now()
-
-        self.log("Iniciando agentes em paralelo...")
+        self.log = []
+    
+    def process(self, config):
+        """Processa a geracao da landing page com todos os agentes"""
+        self.log = []
+        self._log("Orquestrador iniciado")
+        
+        self._log("Fase 1: Analise dos agentes")
+        analysis = {}
         for name, agent in self.agents.items():
-            self.log(f"Executando agente: {name}")
-            try:
-                agent.run()
-                self.log(f"Agente {name} finalizado com sucesso")
-            except Exception as e:
-                self.log(f"Erro no agente {name}: {str(e)}")
+            if name == 'qa':
+                continue
+            if name == 'ux':
+                analysis[name] = agent.analyze("", config)
+            elif name in ['scroll', 'typography']:
+                analysis[name] = agent.analyze("")
+            else:
+                analysis[name] = agent.analyze(config)
+            self._log(f"  {agent.name}: {len(analysis[name].get('issues', []))} problemas, {len(analysis[name].get('suggestions', []))} sugestoes")
+        
+        return {
+            'analysis': analysis,
+            'log': self.log
+        }
+    
+    def enhance_html(self, html, config):
+        """Aplica melhorias de todos os agentes no HTML"""
+        self._log("Fase 2: Melhoria do HTML")
+        
+        enhanced = html
+        
+        enhanced = self.agents['ui'].enhance_html(enhanced, config)
+        self._log("  UI Agent: Melhorias visuais aplicadas")
+        
+        enhanced = self.agents['ux'].enhance_html(enhanced, config)
+        self._log("  UX Agent: Elementos de conversao adicionados")
+        
+        enhanced = self.agents['scroll'].enhance_html(enhanced, config)
+        self._log("  Scroll Agent: Animacoes aplicadas")
+        
+        enhanced = self.agents['typography'].enhance_html(enhanced, config)
+        self._log("  Typography Agent: Tipografia melhorada")
+        
+        return enhanced
+    
+    def validate(self, html, config):
+        """Valida a pagina final com o agente QA"""
+        self._log("Fase 3: Validacao QA")
+        
+        results = self.agents['qa'].validate(html, config)
+        report = self.agents['qa'].generate_report(results)
+        self._log(report)
+        
+        return {
+            'results': results,
+            'report': report,
+            'log': self.log
+        }
+    
+    def _log(self, message):
+        self.log.append(message)
+        print(f"[Orchestrator] {message}")
 
-        self.status = 'completed'
-        self.log("=== TODOS OS AGENTES FINALIZADOS ===")
+def main():
+    """Funcao principal para uso externo"""
+    import json
+    import sys
+    
+    config = json.loads(sys.stdin.read())
+    
+    orchestrator = Orchestrator()
+    
+    analysis = orchestrator.process(config)
+    
+    print(json.dumps({
+        'status': 'ok',
+        'analysis': analysis['analysis'],
+        'log': analysis['log']
+    }, ensure_ascii=False))
 
-    def status_report(self):
-        elapsed = datetime.now() - self.start_time if self.start_time else None
-        self.log(f"Status: {self.status}")
-        self.log(f"Tempo ativo: {elapsed}")
-        return self.status
-
-
-if __name__ == "__main__":
-    orch = Orchestrator()
-    orch.start()
+if __name__ == '__main__':
+    main()
