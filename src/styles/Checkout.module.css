@@ -1,0 +1,132 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.checkoutBox {
+  background: white;
+  border-radius: 15px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.planSummary {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.planSummary h2 {
+  margin: 0 0 10px 0;
+  color: #667eea;
+}
+
+.price {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.price span {
+  font-size: 1rem;
+  color: #666;
+}
+
+.planSummary ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.planSummary li {
+  padding: 5px 0;
+  color: #28a745;
+}
+
+.form {
+  margin-top: 20px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.planSelect {
+  margin-bottom: 20px;
+}
+
+.planSelect label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.planSelect select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  background: white;
+}
+
+.checkoutButton {
+  width: 100%;
+  background: #009ee3;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.checkoutButton:hover {
+  background: #007eb5;
+}
+
+.checkoutButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.security {
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+  margin-top: 20px;
+}
