@@ -140,22 +140,22 @@ export default function Dashboard() {
             {pages.length === 0 ? (
               <p className={styles.empty}>Nenhuma landing page criada ainda.</p>
             ) : (
-              <table>
+              <table className={styles.table}>
                 <thead>
                   <tr>
-                    <th>Nome</th>
-                    <th>Nicho</th>
-                    <th>Data</th>
-                    <th>Ações</th>
+                    <th className={styles.th}>Nome</th>
+                    <th className={styles.th}>Nicho</th>
+                    <th className={styles.th}>Data</th>
+                    <th className={styles.th}>Acoes</th>
                   </tr>
                 </thead>
                 <tbody>
                   {pages.map(page => (
                     <tr key={page.id}>
-                      <td>{page.name}</td>
-                      <td>{page.niche}</td>
-                      <td>{page.created}</td>
-                      <td>
+                      <td className={styles.td}>{page.name}</td>
+                      <td className={styles.td}>{page.niche}</td>
+                      <td className={styles.td}>{page.created}</td>
+                      <td className={styles.td}>
                         <button>Editar</button>
                         <button>Excluir</button>
                       </td>

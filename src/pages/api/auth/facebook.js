@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   try {
     const tokenResponse = await fetch(
-      'https://graph.facebook.com/v18.0/oauth/access_token?client_id=' + process.env.FACEBOOK_APP_ID + '&redirect_uri=' + (process.env.NEXT_PUBLIC_URL || 'https://saasgenerator.vercel.app') + '/api/auth/callback/facebook&client_secret=' + process.env.FACEBOOK_APP_SECRET + '&code=' + code
+      'https://graph.facebook.com/v18.0/oauth/access_token?client_id=' + process.env.FACEBOOK_APP_ID + '&redirect_uri=' + (process.env.NEXT_PUBLIC_URL || 'https://saasgenerator.vercel.app') + '/login&client_secret=' + process.env.FACEBOOK_APP_SECRET + '&code=' + code
     );
     
     const tokenData = await tokenResponse.json();

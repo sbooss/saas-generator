@@ -6,7 +6,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const APP_ID = '1758403262661304';
-  const REDIRECT_URI = 'https://saasgenerator.vercel.app/api/auth/callback/facebook';
+  const REDIRECT_URI = 'https://saasgenerator.vercel.app/login';
 
   useEffect(() => {
     // Verificar se retornou do Facebook OAuth

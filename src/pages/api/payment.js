@@ -36,8 +36,8 @@ export default async function handler(req, res) {
       },
       back_urls: {
         success: (process.env.NEXT_PUBLIC_URL || 'https://saasgenerator.vercel.app') + '/dashboard',
-        failure: (process.env.NEXT_PUBLIC_URL || 'https://saasgenerator.vercel.app') + '/pagamento-erro',
-        pending: (process.env.NEXT_PUBLIC_URL || 'https://saasgenerator.vercel.app') + '/pagamento-pendente'
+        failure: (process.env.NEXT_PUBLIC_URL || 'https://saasgenerator.vercel.app') + '/checkout',
+        pending: (process.env.NEXT_PUBLIC_URL || 'https://saasgenerator.vercel.app') + '/dashboard'
       },
       auto_return: 'approved'
     };

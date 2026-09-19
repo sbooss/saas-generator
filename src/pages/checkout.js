@@ -1,9 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import styles from '../styles/Checkout.module.css';
 
 export default function Checkout() {
+  const router = useRouter();
   const [selectedPlan, setSelectedPlan] = useState('basico');
+
+  useEffect(() => {
+    if (router.query.plan) {
+      setSelectedPlan(router.query.plan);
+    }
+  }, [router.query.plan]);
   const [email, setEmail] = useState('');
   const [businessName, setBusinessName] = useState('');
   const [loading, setLoading] = useState(false);
