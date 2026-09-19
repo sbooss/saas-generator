@@ -408,65 +408,127 @@ function qaValidate(html, config) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Metodo nao permitido' });
 
-  const config = req.body;
-  if (!config.businessName) return res.status(400).json({ error: 'Nome da empresa obrigatorio' });
+  const { description } = req.body;
+  if (!description || !description.trim()) return res.status(400).json({ error: 'Descricao obrigatoria' });
 
-  const nicheLabels = {
-    saude: 'saude e bem-estar', tecnologia: 'tecnologia', imobiliario: 'imobiliario',
-    educacao: 'educacao', advocacia: 'advocacia', restaurant: 'restaurante',
-    beleza: 'beleza e estetica', fitness: 'fitness', consultoria: 'consultoria', default: 'geral'
-  };
+  // Prompt para a IA extrair informacoes da descricao
+  const extractPrompt = `Analise esta descricao de um cliente que quer uma landing page e extraia as informacoes em JSON.
 
-  const nicheLabel = nicheLabels[config.niche] || 'geral';
+DESCRICAO DO CLIENTE:
+"${description}"
 
-  const prompt = `Voce e um expert em design web e copywriting. Crie o conteudo para uma landing page profissional de alta conversao.
+Extraia NO MINIMO:
+- businessName: nome do negocio/empresa
+- niche: qual o nicho (saude, tecnologia, imobiliario, educacao, advocacia, restaurant, beleza, fitness, consultoria, ou outro)
+- description: resumo do que o cliente quer (max 2 frases)
+- style: estilo visual (elegante, moderno, minimalista, sofisticado, etc)
+- colors: cores que o cliente mencionou (se nao mencionou, use null)
+- phone: telefone se mencionou
+- address: endereco se mencionou
+- email: email se mencionou
+- whatsapp: numero do whatsapp se mencionou
+- instagram: usuario do instagram se mencionou
+- sections: o que deve ter na pagina (beneficios, equipe, depoimentos, contato, etc)
 
-Empresa: ${config.businessName}
-Nicho: ${nicheLabel}
-Descricao do cliente: ${config.description || 'Nao informada'}
-Endereco: ${config.address || 'Nao informado'}
-Telefone: ${config.phone || 'Nao informado'}
-Email: ${config.email || 'Nao informado'}
-Cores escolhidas: primaria=${config.primaryColor}, secundaria=${config.secondaryColor}, fundo=${config.bgColor}, texto=${config.textColor}, destaque=${config.accentColor}
-Observacoes do cliente: ${config.observations || 'Nenhuma'}
-
-INSTRUCOES IMPORTANTES:
-1. O headline deve ser UNICO, impactante e especifico para este negocio. NAO use titulos genericos.
-2. O subheadline deve explicar a proposta de valor de forma irresistivel.
-3. As 4 features devem ser ESPECIFICAS para este nicho, com titulos e descricoes que parecam escritos por um humano.
-4. O depoimento deve parecer REAL, com nome e cargo convincentes.
-5. O texto do botao CTA deve ser persuasivo e orientado a acao.
-
-Responda APENAS com JSON valido (sem markdown, sem crases) no formato:
+Responda APENAS com JSON valido (sem markdown):
 {
-  "headline": "titulo principal chamativo e unico",
-  "subheadline": "subtitulo irresistivel",
-  "cta": "texto do botao de acao",
-  "features": [
-    {"icon": "emoji", "title": "Feature 1", "desc": "Descricao curta e persuasiva"},
-    {"icon": "emoji", "title": "Feature 2", "desc": "Descricao curta e persuasiva"},
-    {"icon": "emoji", "title": "Feature 3", "desc": "Descricao curta e persuasiva"},
-    {"icon": "emoji", "title": "Feature 4", "desc": "Descricao curta e persuasiva"}
-  ],
-  "testimonial": {"text": "depoimento real e convincente", "author": "Nome da pessoa", "role": "Cargo ou relacao com a empresa"}
+  "businessName": "nome",
+  "niche": "nicho",
+  "description": "resumo",
+  "style": "estilo",
+  "colors": null,
+  "phone": null,
+  "address": null,
+  "email": null,
+  "whatsapp": null,
+  "instagram": null,
+  "sections": ["beneficios", "contato"]
 }`;
 
+  let extracted = null;
+
+  // Tenta usar Ollama
   try {
-    const ollamaResponse = await tryOllama(prompt);
+    const ollamaResponse = await tryOllama(extractPrompt);
     const jsonMatch = ollamaResponse.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      const parsed = JSON.parse(jsonMatch[0]);
-      const merged = { ...config, description: config.description };
-      if (parsed.headline) merged.description = parsed.headline + '. ' + (parsed.subheadline || '');
-      const result = buildLandingPage(merged);
-      if (parsed.headline) {
-        result.html = result.html.replace(merged.description.split('.')[0].trim().substring(0, 80), parsed.headline);
-      }
-      return res.status(200).json({ success: true, content: result, source: 'ollama' });
+      extracted = JSON.parse(jsonMatch[0]);
     }
   } catch (e) {
-    console.log('Ollama indisponivel, usando templates:', e.message);
+    console.log('Ollama indisponivel, usando fallback');
   }
+
+  // Fallback: extrair basico da descricao
+  if (!extracted) {
+    const lower = desc = description.toLowerCase();
+    let niche = 'default';
+    if (lower.includes('saude') || lower.includes('clinica') || lower.includes('medic') || lower.includes('hospital')) niche = 'saude';
+    else if (lower.includes('tecnologia') || lower.includes('software') || lower.includes('sistema') || lower.includes('tech')) niche = 'tecnologia';
+    else if (lower.includes('imobili') || lower.includes('imovel') || lower.includes('apartamento') || lower.includes('casa')) niche = 'imobiliario';
+    else if (lower.includes('educac') || lower.includes('escola') || lower.includes('curso') || lower.includes('aula')) niche = 'educacao';
+    else if (lower.includes('advoc') || lower.includes('advogad') || lower.includes('juridic')) niche = 'advocacia';
+    else if (lower.includes('restaur') || lower.includes('comida') || lower.includes('restaurante') || lower.includes('food')) niche = 'restaurant';
+    else if (lower.includes('beleza') || lower.includes('salao') || lower.includes('cabelo') || lower.includes('estetic')) niche = 'beleza';
+    else if (lower.includes('fitness') || lower.includes('academia') || lower.includes('treino') || lower.includes('muscul')) niche = 'fitness';
+    else if (lower.includes('consult') || lower.includes('assessor')) niche = 'consultoria';
+
+    // Extrair telefone
+    const phoneMatch = description.match(/\(?\d{2}\)?\s*\d{4,5}[\s-]?\d{4}/);
+    const phone = phoneMatch ? phoneMatch[0] : null;
+
+    // Extrair whatsapp
+    const waMatch = description.match(/whatsapp[:\s]*(\(?\d{2}\)?\s*\d{4,5}[\s-]?\d{4})/i);
+    const whatsapp = waMatch ? waMatch[1].replace(/[^0-9]/g, '') : (phone ? phone.replace(/[^0-9]/g, '') : null);
+
+    // Extrair instagram
+    const igMatch = description.match(/instagram[:\s]*@?(\w+)/i) || description.match(/@(\w+)/);
+    const instagram = igMatch ? igMatch[1] : null;
+
+    // Extrair endereco
+    const addrMatch = description.match(/endere[co]{2}[:\s]*(.*?)(?:\.|,|\n|$)/i) || description.match(/rua[:\s]*(.*?)(?:\.|,|\n|$)/i) || description.match(/avenida[:\s]*(.*?)(?:\.|,|\n|$)/i);
+    const address = addrMatch ? addrMatch[1].trim() : null;
+
+    // Extrair email
+    const emailMatch = description.match(/[\w.-]+@[\w.-]+\.\w+/);
+    const email = emailMatch ? emailMatch[0] : null;
+
+    // Extrair nome (primeira linha ou palavras significativas)
+    const nameMatch = description.match(/^(.*?)(?:\.|,|\n|$)/i);
+    let businessName = nameMatch ? nameMatch[1].trim() : 'Meu Negocio';
+    if (businessName.length > 50) businessName = businessName.substring(0, 50);
+
+    extracted = {
+      businessName,
+      niche,
+      description: description.substring(0, 200),
+      style: lower.includes('elegant') ? 'elegante' : lower.includes('moderno') ? 'moderno' : lower.includes('minimalista') ? 'minimalista' : 'profissional',
+      colors: null,
+      phone,
+      address,
+      email,
+      whatsapp,
+      instagram,
+      sections: ['beneficios', 'contato']
+    };
+  }
+
+  // Montar config final
+  const config = {
+    businessName: extracted.businessName || 'Meu Negocio',
+    niche: extracted.niche || 'default',
+    description: extracted.description || description,
+    address: extracted.address || '',
+    phone: extracted.phone || '',
+    email: extracted.email || '',
+    whatsapp: extracted.whatsapp || '',
+    instagram: extracted.instagram || '',
+    primaryColor: null,
+    secondaryColor: null,
+    bgColor: null,
+    textColor: null,
+    accentColor: null,
+    observations: description
+  };
 
   let result = buildLandingPage(config);
   
@@ -482,7 +544,7 @@ Responda APENAS com JSON valido (sem markdown, sem crases) no formato:
   
   return res.status(200).json({ 
     success: true, 
-    content: result, 
+    content: { title: config.businessName, html: result.html }, 
     source: 'agents',
     qa: qaResult
   });
