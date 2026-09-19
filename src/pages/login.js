@@ -1,120 +1,282 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 export default function Login() {
-  const [user, setUser] = useState(null);
+  const router = useRouter();
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const APP_ID = '1758403262661304';
-  const REDIRECT_URI = 'https://saasgenerator.vercel.app/login';
-
-  useEffect(() => {
-    // Verificar se retornou do Facebook OAuth
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    
-    if (code) {
-      handleFacebookCallback(code);
-    }
-  }, []);
-
-  const handleFacebookLogin = () => {
-    const facebookUrl = `https://www.facebook.com/v18.0/dialog/oauth?client_id=${APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=email,public_profile&response_type=code`;
-    
-    window.location.href = facebookUrl;
-  };
-
-  const handleFacebookCallback = async (code) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     setLoading(true);
-    try {
-      const response = await fetch('/api/auth/facebook', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code })
-      });
-      
-      const data = await response.json();
-      if (data.user) {
-        setUser(data.user);
-        localStorage.setItem('user', JSON.stringify(data.user));
+    setError('');
+
+    setTimeout(() => {
+      if (isLogin) {
+        const users = JSON.parse(localStorage.getItem('saas_users') || '[]');
+        const user = users.find(u => u.email === email && u.password === password);
+        if (user) {
+          localStorage.setItem('saas_current_user', JSON.stringify(user));
+          router.push('/dashboard');
+        } else {
+          setError('Email ou senha incorretos');
+          setLoading(false);
+        }
+      } else {
+        if (!name || !email || !password) {
+          setError('Preencha todos os campos');
+          setLoading(false);
+          return;
+        }
+        if (password.length < 6) {
+          setError('Senha deve ter pelo menos 6 caracteres');
+          setLoading(false);
+          return;
+        }
+        const users = JSON.parse(localStorage.getItem('saas_users') || '[]');
+        if (users.find(u => u.email === email)) {
+          setError('Email ja cadastrado');
+          setLoading(false);
+          return;
+        }
+        const newUser = { id: Date.now(), name, email, password, createdAt: new Date().toISOString() };
+        users.push(newUser);
+        localStorage.setItem('saas_users', JSON.stringify(users));
+        localStorage.setItem('saas_current_user', JSON.stringify(newUser));
+        router.push('/dashboard');
       }
-    } catch (error) {
-      console.error('Erro no login:', error);
-    }
-    setLoading(false);
+    }, 800);
   };
-
-  const handleLogout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
-  };
-
-  if (user) {
-    return (
-      <div style={{ padding: '40px', textAlign: 'center' }}>
-        <h1>Bem-vindo, {user.name}!</h1>
-        <p>Email: {user.email}</p>
-        <img src={user.picture?.data?.url} alt="Foto" style={{ borderRadius: '50%', width: '100px' }} />
-        <br /><br />
-        <button onClick={handleLogout} style={{ padding: '10px 20px', cursor: 'pointer' }}>
-          Sair
-        </button>
-        <br /><br />
-        <a href="/dashboard">Ir para o Painel</a>
-      </div>
-    );
-  }
 
   return (
     <>
       <Head>
-        <title>Login - SaaS Generator</title>
+        <title>{isLogin ? 'Entrar' : 'Criar Conta'} - SaaS Generator</title>
       </Head>
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        background: '#0a0a0a',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
+        padding: '20px'
       }}>
         <div style={{
-          background: 'white',
-          padding: '40px',
-          borderRadius: '15px',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
-          textAlign: 'center',
-          maxWidth: '400px'
+          width: '100%',
+          maxWidth: '440px',
+          position: 'relative'
         }}>
-          <h1 style={{ color: '#333', marginBottom: '30px' }}>SaaS Generator</h1>
-          <p style={{ color: '#666', marginBottom: '30px' }}>Entre com sua conta</p>
-          
-          <button
-            onClick={handleFacebookLogin}
-            disabled={loading}
-            style={{
-              background: '#1877f2',
-              color: 'white',
-              border: 'none',
-              padding: '15px 30px',
-              borderRadius: '8px',
-              fontSize: '16px',
-              cursor: 'pointer',
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px'
-            }}
-          >
-            {loading ? 'Conectando...' : 'Entrar com Facebook'}
-          </button>
-          
-          <p style={{ marginTop: '30px', color: '#999', fontSize: '12px' }}>
-            Ao entrar, você concorda com nossos<br />
-            <a href="/termos">Termos de Serviço</a> e <a href="/privacidade">Política de Privacidade</a>
-          </p>
+          <div style={{
+            position: 'absolute',
+            top: '-100px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '400px',
+            height: '400px',
+            background: 'radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+            pointerEvents: 'none'
+          }} />
+
+          <div style={{
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: '24px',
+            padding: '48px 40px',
+            backdropFilter: 'blur(20px)',
+            position: 'relative'
+          }}>
+            <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                marginBottom: '16px'
+              }}>
+                <span style={{ fontSize: '28px', fontWeight: 800, background: 'linear-gradient(135deg, #6366f1, #ec4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  SaaS Generator
+                </span>
+              </div>
+              <h1 style={{ color: '#fff', fontSize: '28px', fontWeight: 700, marginBottom: '8px' }}>
+                {isLogin ? 'Bem-vindo de volta' : 'Criar sua conta'}
+              </h1>
+              <p style={{ color: '#666', fontSize: '14px' }}>
+                {isLogin ? 'Entre para gerenciar suas landing pages' : 'Comece a criar landing pages profissionais'}
+              </p>
+            </div>
+
+            {error && (
+              <div style={{
+                background: 'rgba(239,68,68,0.1)',
+                border: '1px solid rgba(239,68,68,0.3)',
+                borderRadius: '12px',
+                padding: '12px 16px',
+                marginBottom: '24px',
+                color: '#ef4444',
+                fontSize: '14px'
+              }}>
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit}>
+              {!isLogin && (
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', color: '#999', fontSize: '13px', marginBottom: '8px', fontWeight: 500 }}>
+                    Nome completo
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Seu nome"
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '12px',
+                      color: '#fff',
+                      fontSize: '15px',
+                      outline: 'none',
+                      transition: 'border-color 0.2s',
+                      boxSizing: 'border-box'
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = 'rgba(99,102,241,0.5)'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+                  />
+                </div>
+              )}
+
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', color: '#999', fontSize: '13px', marginBottom: '8px', fontWeight: 500 }}>
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="seu@email.com"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '12px',
+                    color: '#fff',
+                    fontSize: '15px',
+                    outline: 'none',
+                    transition: 'border-color 0.2s',
+                    boxSizing: 'border-box'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'rgba(99,102,241,0.5)'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+                />
+              </div>
+
+              <div style={{ marginBottom: '32px' }}>
+                <label style={{ display: 'block', color: '#999', fontSize: '13px', marginBottom: '8px', fontWeight: 500 }}>
+                  Senha
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={isLogin ? "Sua senha" : "Minimo 6 caracteres"}
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '12px',
+                    color: '#fff',
+                    fontSize: '15px',
+                    outline: 'none',
+                    transition: 'border-color 0.2s',
+                    boxSizing: 'border-box'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'rgba(99,102,241,0.5)'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  width: '100%',
+                  padding: '16px',
+                  background: loading ? '#555' : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.3s',
+                  marginBottom: '24px'
+                }}
+              >
+                {loading ? (
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <span style={{ width: '18px', height: '18px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                    Processando...
+                  </span>
+                ) : (
+                  isLogin ? 'Entrar' : 'Criar Conta'
+                )}
+              </button>
+
+              <div style={{ textAlign: 'center' }}>
+                <button
+                  type="button"
+                  onClick={() => { setIsLogin(!isLogin); setError(''); }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#6366f1',
+                    fontSize: '14px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {isLogin ? 'Nao tem conta? Criar agora' : 'Ja tem conta? Entrar'}
+                </button>
+              </div>
+            </form>
+
+            <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <a
+                href="/"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  color: '#666',
+                  fontSize: '14px',
+                  textDecoration: 'none'
+                }}
+              >
+                <span>{'<'}</span> Voltar ao site
+              </a>
+            </div>
+          </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </>
   );
 }
