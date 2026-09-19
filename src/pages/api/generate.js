@@ -48,10 +48,10 @@ function buildLandingPage(config) {
       headline: 'Cuide da Sua Saude com Quem Entende',
       subheadline: 'Atendimento humanizado e de excelencia para voce e sua familia. Agende sua consulta hoje.',
       features: [
-        { icon: '🩺', title: 'Equipe Especializada', desc: 'Profissionais qualificados e experientes em cada area da saude.' },
-        { icon: '🏥', title: 'Estrutura Moderna', desc: 'Clinica equipada com os mais modernos equipamentos do mercado.' },
-        { icon: '💊', title: 'Tratamento Personalizado', desc: 'Cada paciente recebe um plano de tratamento unico e sob medida.' },
-        { icon: '📋', title: 'Agendamento Flexivel', desc: 'Marque suas consultas pelo WhatsApp ou telefone, no melhor horario pra voce.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>', title: 'Equipe Especializada', desc: 'Profissionais qualificados e experientes em cada area da saude.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1M5 21V5a2 2 0 012-2h10a2 2 0 012 2v16"/></svg>', title: 'Estrutura Moderna', desc: 'Clinica equipada com os mais modernos equipamentos do mercado.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>', title: 'Tratamento Personalizado', desc: 'Cada paciente recebe um plano de tratamento unico e sob medida.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12h6M9 16h6"/></svg>', title: 'Agendamento Flexivel', desc: 'Marque suas consultas pelo WhatsApp ou telefone, no melhor horario pra voce.' }
       ],
       cta: 'Agende Sua Consulta',
       testimonial: { text: 'Excelente atendimento! A equipe e muito atenciosa e profissional. Recomendo para toda a familia.', author: 'Maria Silva', role: 'Paciente ha 3 anos' }
@@ -60,10 +60,10 @@ function buildLandingPage(config) {
       headline: 'Solucoes Tecnologicas Que Impulsionam Seu Negocio',
       subheadline: 'Desenvolvemos sistemas sob medida que aumentam sua produtividade e reduzem custos.',
       features: [
-        { icon: '⚡', title: 'Sistemas Sob Medida', desc: 'Software desenvolvido especificamente para as necessidades do seu negocio.' },
-        { icon: '🔒', title: 'Seguranca Garantida', desc: 'Protecao de dados com criptografia de nivel bancario.' },
-        { icon: '📊', title: 'Relatorios Inteligentes', desc: 'Dashboards que transformam dados em decisoes estrategicas.' },
-        { icon: '🚀', title: 'Suporte 24/7', desc: 'Nossa equipe esta sempre disponível para quando voce precisar.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', title: 'Sistemas Sob Medida', desc: 'Software desenvolvido especificamente para as necessidades do seu negocio.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>', title: 'Seguranca Garantida', desc: 'Protecao de dados com criptografia de nivel bancario.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V13M12 17V9M16 17V5"/></svg>', title: 'Relatorios Inteligentes', desc: 'Dashboards que transformam dados em decisoes estrategicas.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>', title: 'Suporte 24/7', desc: 'Nossa equipe esta sempre disponível para quando voce precisar.' }
       ],
       cta: 'Solicite Uma Demonstracao',
       testimonial: { text: 'A solucao transformou nossa operacao. Reduzimos 40% dos custos operacionais no primeiro ano.', author: 'Carlos Mendes', role: 'CEO da TechStart' }
@@ -72,10 +72,10 @@ function buildLandingPage(config) {
       headline: 'Encontre O Imovel Dos Seus Sonhos',
       subheadline: 'As melhores opcoes de imoveis com atendimento personalizado e financiamento facilitado.',
       features: [
-        { icon: '🏠', title: 'Portfolio Exclusivo', desc: 'Imoveis selecionados nas melhores localizacoes da cidade.' },
-        { icon: '💰', title: 'Financiamento Facilitado', desc: 'Parceria com os principais bancos para o melhor financiamento.' },
-        { icon: '📍', title: 'Localizacao Privilegiada', desc: 'Imoveis em bairros valorizados com infraestrutura completa.' },
-        { icon: '🤝', title: 'Assessoria Completa', desc: 'Do papell ao cambio, cuidamos de tudo para voce.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', title: 'Portfolio Exclusivo', desc: 'Imoveis selecionados nas melhores localizacoes da cidade.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10h8M8 14h8"/></svg>', title: 'Financiamento Facilitado', desc: 'Parceria com os principais bancos para o melhor financiamento.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>', title: 'Localizacao Privilegiada', desc: 'Imoveis em bairros valorizados com infraestrutura completa.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>', title: 'Assessoria Completa', desc: 'Do papell ao cambio, cuidamos de tudo para voce.' }
       ],
       cta: 'Conheca Os Imoveis',
       testimonial: { text: 'Conseguimos nosso apartamento ideal com Conditions muito boas. Equipe extremamente profissional.', author: 'Ana e Pedro', role: 'Novos proprietarios' }
@@ -84,10 +84,10 @@ function buildLandingPage(config) {
       headline: 'Transforme Seu Futuro Atraves Da Educacao',
       subheadline: 'Cursos e programas de alta qualidade para impulsionar sua carreira.',
       features: [
-        { icon: '📚', title: 'Conteudo Atualizado', desc: 'Grade curricular alinhada com as demandas do mercado.' },
-        { icon: '👨‍🏫', title: 'Professores Experientes', desc: 'Corpo docente com ampla experiencia pratic e academica.' },
-        { icon: '🎯', title: 'Metodologia Pratica', desc: 'Aprenda fazendo com projetos reais e estudos de caso.' },
-        { icon: '🏆', title: 'Certificacao Reconhecida', desc: 'Diploma validado e reconhecido pelo mercado de trabalho.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>', title: 'Conteudo Atualizado', desc: 'Grade curricular alinhada com as demandas do mercado.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>', title: 'Professores Experientes', desc: 'Corpo docente com ampla experiencia pratic e academica.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>', title: 'Metodologia Pratica', desc: 'Aprenda fazendo com projetos reais e estudos de caso.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0012 0V2Z"/></svg>', title: 'Certificacao Reconhecida', desc: 'Diploma validado e reconhecido pelo mercado de trabalho.' }
       ],
       cta: 'Inscreva-Se Agora',
       testimonial: { text: 'O curso mudou minha trajetoria profissional. Em 6 meses ja estava atuando na area.', author: 'Lucas Ferreira', role: 'Ex-aluno, agora gerente' }
@@ -96,10 +96,10 @@ function buildLandingPage(config) {
       headline: 'Assessoria Juridica De Confianca',
       subheadline: 'Advocacia especializada com atendimento personalizado e resultados comprovados.',
       features: [
-        { icon: '⚖️', title: 'Especializacao Total', desc: 'Cada advogado e especialista em sua area de atuacao.' },
-        { icon: '📜', title: 'Experiencia Comprovada', desc: 'Mais de 500 casos resolvidos com sucesso.' },
-        { icon: '🤝', title: 'Atendimento Humanizado', desc: 'Cada caso recebe atencao dedicada e personalizada.' },
-        { icon: '💼', title: 'Transparencia Total', desc: 'Acompanhamento em tempo real do seu caso.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"/><path d="M1 6l5 6 5-6"/><path d="M13 6l5 6 5-6"/><path d="M1 22h22"/></svg>', title: 'Especializacao Total', desc: 'Cada advogado e especialista em sua area de atuacao.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>', title: 'Experiencia Comprovada', desc: 'Mais de 500 casos resolvidos com sucesso.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>', title: 'Atendimento Humanizado', desc: 'Cada caso recebe atencao dedicada e personalizada.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>', title: 'Transparencia Total', desc: 'Acompanhamento em tempo real do seu caso.' }
       ],
       cta: 'Consulte Seu Caso',
       testimonial: { text: 'Resolveu meu caso com muita competencia e profissionalismo. Super recomendo.', author: 'Roberto Santos', role: 'Cliente ha 5 anos' }
@@ -108,10 +108,10 @@ function buildLandingPage(config) {
       headline: 'Uma Experiencia Gastronomica Imperdivel',
       subheadline: 'Sabores unicos em um ambiente acolhedor. Venha conhecer nossa cozinha.',
       features: [
-        { icon: '🍽️', title: 'Cozinha Autoral', desc: 'Pratos criados pelo nosso chef com ingredientes selecionados.' },
-        { icon: '🍷', title: 'Carta de Vinhos', desc: 'Selecao refinada de vinhos nacionais e importados.' },
-        { icon: '🎵', title: 'Ambiente Premium', desc: 'Decoracao elegante e trilha sonora para uma noite perfeita.' },
-        { icon: '📱', title: 'Reserva Online', desc: 'Agende sua mesa pelo WhatsApp ou nosso site.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>', title: 'Cozinha Autoral', desc: 'Pratos criados pelo nosso chef com ingredientes selecionados.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 22h8"/><path d="M12 11v11"/><path d="M17 2H7l5 9 5-9z"/></svg>', title: 'Carta de Vinhos', desc: 'Selecao refinada de vinhos nacionais e importados.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', title: 'Ambiente Premium', desc: 'Decoracao elegante e trilha sonora para uma noite perfeita.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>', title: 'Reserva Online', desc: 'Agende sua mesa pelo WhatsApp ou nosso site.' }
       ],
       cta: 'Reserve Sua Mesa',
       testimonial: { text: 'Melhor restaurante da cidade! Comida excepcional e atendimento impecavel.', author: 'Fernanda Lima', role: 'Cliente frequente' }
@@ -120,10 +120,10 @@ function buildLandingPage(config) {
       headline: 'Sua Beleza Merece O Melhor',
       subheadline: 'Tratamentos exclusivos com profissionais especializados e produtos de alta qualidade.',
       features: [
-        { icon: '✨', title: 'Produtos Premium', desc: 'Utilizamos apenas marcas reconhecidas internacionalmente.' },
-        { icon: '💅', title: 'Servicos Completos', desc: 'De cabelo a unha, tudo o que voce precisa em um so lugar.' },
-        { icon: '🌟', title: 'Tendencias Atuais', desc: 'Profissionais sempre atualizados com as ultimas tendencias.' },
-        { icon: '💆', title: 'Experiencia Relaxante', desc: 'Ambiente projetado para seu conforto e bem-estar.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', title: 'Produtos Premium', desc: 'Utilizamos apenas marcas reconhecidas internacionalmente.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>', title: 'Servicos Completos', desc: 'De cabelo a unha, tudo o que voce precisa em um so lugar.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', title: 'Tendencias Atuais', desc: 'Profissionais sempre atualizados com as ultimas tendencias.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>', title: 'Experiencia Relaxante', desc: 'Ambiente projetado para seu conforto e bem-estar.' }
       ],
       cta: 'Agende Seu Horario',
       testimonial: { text: 'Sempre saio de la maravilhosa! Profissionais excelentes e ambiente super acolhedor.', author: 'Juliana Costa', role: 'Cliente ha 2 anos' }
@@ -132,10 +132,10 @@ function buildLandingPage(config) {
       headline: 'Transforme Seu Corpo, Mude Sua Vida',
       subheadline: 'Academia completa com equipamentos modernos e personal trainers qualificados.',
       features: [
-        { icon: '💪', title: 'Equipamentos Modernos', desc: 'Maquinas de ultima geracao para seu treino ideal.' },
-        { icon: '🏃', title: 'Personal Training', desc: 'Treinos personalizados por profissionais certificados.' },
-        { icon: '🥗', title: 'Acompanhamento Nutricional', desc: 'Nutricionista para complementar seus resultados.' },
-        { icon: '📱', title: 'App Exclusivo', desc: 'Acompanhe seus treinos e evolucao pelo celular.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>', title: 'Equipamentos Modernos', desc: 'Maquinas de ultima geracao para seu treino ideal.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="M10 22V17L7 14l3-7 4 2 3 5-2 8"/></svg>', title: 'Personal Training', desc: 'Treinos personalizados por profissionais certificados.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 21h10"/><rect x="2" y="3" width="20" height="18" rx="2"/></svg>', title: 'Acompanhamento Nutricional', desc: 'Nutricionista para complementar seus resultados.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>', title: 'App Exclusivo', desc: 'Acompanhe seus treinos e evolucao pelo celular.' }
       ],
       cta: 'Comece Agora',
       testimonial: { text: 'Perdi 15kg em 4 meses! O time de profissionais e incrivel.', author: 'Marcos Oliveira', role: 'Aluno ha 1 ano' }
@@ -144,10 +144,10 @@ function buildLandingPage(config) {
       headline: 'Estrategia Que Gera Resultados Reais',
       subheadline: 'Consultoria especializada para levar seu negocio ao proximo nivel.',
       features: [
-        { icon: '📈', title: 'Analise Profunda', desc: 'Diagnostico completo da situacao atual do seu negocio.' },
-        { icon: '🎯', title: 'Plano Personalizado', desc: 'Estrategia sob medida para seus objetivos especificos.' },
-        { icon: '👥', title: 'Time Experiente', desc: 'Consultores com ampla experiencia no mercado.' },
-        { icon: '📊', title: 'Resultados Mensuraveis', desc: 'Acompanhamento mensal com metricas claras de evolucao.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>', title: 'Analise Profunda', desc: 'Diagnostico completo da situacao atual do seu negocio.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>', title: 'Plano Personalizado', desc: 'Estrategia sob medida para seus objetivos especificos.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>', title: 'Time Experiente', desc: 'Consultores com ampla experiencia no mercado.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V13M12 17V9M16 17V5"/></svg>', title: 'Resultados Mensuraveis', desc: 'Acompanhamento mensal com metricas claras de evolucao.' }
       ],
       faleConosco: true,
       cta: 'Fale Com Um Consultor',
@@ -155,12 +155,12 @@ function buildLandingPage(config) {
     },
     default: {
       headline: `${businessName} - Qualidade e Confianca`,
-      subheadline: description || 'Solucoes completas para atender suas necessidades com excelencia.',
+      subheadline: 'Solucoes completas para atender suas necessidades com excelencia e profissionalismo.',
       features: [
-        { icon: '⭐', title: 'Qualidade Superior', desc: 'Compromisso inabalavel com a excelencia em tudo que fazemos.' },
-        { icon: '🤝', title: 'Atendimento Personalizado', desc: 'Cada cliente e unico e recebe atencao dedicada.' },
-        { icon: '🚀', title: 'Inovacao Constante', desc: 'Sempre buscando as melhores solucoes e tecnologias.' },
-        { icon: '💡', title: 'Experiencia Comprovada', desc: 'Anos de atuacao no mercado com resultados expressivos.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', title: 'Qualidade Superior', desc: 'Compromisso inabalavel com a excelencia em tudo que fazemos.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>', title: 'Atendimento Personalizado', desc: 'Cada cliente e unico e recebe atencao dedicada.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>', title: 'Inovacao Constante', desc: 'Sempre buscando as melhores solucoes e tecnologias.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14"/></svg>', title: 'Experiencia Comprovada', desc: 'Anos de atuacao no mercado com resultados expressivos.' }
       ],
       cta: 'Entre Em Contato',
       testimonial: { text: 'Excelente empresa! Profissionais competentes e atendimento de primeira.', author: 'Cliente Satisfeito', role: 'Cliente Regular' }
@@ -169,9 +169,8 @@ function buildLandingPage(config) {
 
   const content = nicheContent[niche] || nicheContent.default;
 
-  const customHeadline = description && description.length > 20
-    ? description.split('.')[0].trim().substring(0, 80)
-    : content.headline;
+  // NUNCA usar a descricao como titulo - sempre usar copy profissional do nicho
+  const customHeadline = content.headline;
 
   const contactSection = (address || phone || email) ? `
     <section style="padding:100px 24px;background:${bgColor};">
@@ -218,15 +217,16 @@ function buildLandingPage(config) {
     .hero p{font-size:clamp(16px,2vw,20px);color:${textColor}aa;max-width:600px;margin:0 auto 40px;line-height:1.7;}
     .cta-btn{display:inline-flex;align-items:center;gap:10px;padding:18px 40px;background:linear-gradient(135deg,${primaryColor},${secondaryColor});color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.3s;box-shadow:0 8px 32px ${primaryColor}40;}
     .cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px ${primaryColor}60;}
-    .features{padding:100px 24px;background:${bgColor};}
-    .features-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;}
-    .feature-card{padding:36px 28px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:20px;transition:all 0.3s;}
+    .features{padding:120px 24px;background:${bgColor};}
+    .features-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+    .feature-card{padding:40px 32px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:20px;transition:all 0.3s;}
     .feature-card:hover{transform:translateY(-4px);border-color:${primaryColor}30;background:rgba(255,255,255,0.04);}
-    .feature-icon{font-size:36px;margin-bottom:16px;}
-    .feature-card h3{font-size:17px;font-weight:700;margin:0 0 10px;color:${textColor};}
-    .feature-card p{font-size:14px;color:${textColor}88;line-height:1.7;margin:0;}
-    .testimonials{padding:100px 24px;background:linear-gradient(180deg,${bgColor},${bgColor}f0);}
-    .testimonial-card{max-width:700px;margin:0 auto;text-align:center;padding:48px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:24px;position:relative;}
+    .feature-icon{width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:${primaryColor}15;border-radius:12px;margin-bottom:20px;color:${primaryColor};}
+    .feature-icon svg{width:24px;height:24px;}
+    .feature-card h3{font-size:18px;font-weight:700;margin:0 0 12px;color:${textColor};letter-spacing:-0.01em;}
+    .feature-card p{font-size:15px;color:${textColor}99;line-height:1.7;margin:0;}
+    .testimonials{padding:120px 24px;background:linear-gradient(180deg,${bgColor},${bgColor}f0);}
+    .testimonial-card{max-width:700px;margin:0 auto;text-align:center;padding:56px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:24px;position:relative;}
     .testimonial-card::before{content:'\\201C';position:absolute;top:20px;left:32px;font-size:80px;color:${primaryColor}30;font-family:Georgia,serif;line-height:1;}
     .testimonial-text{font-size:18px;line-height:1.8;color:${textColor}dd;margin:0 0 24px;font-style:italic;}
     .testimonial-author{font-size:15px;font-weight:700;color:${textColor};margin:0;}
