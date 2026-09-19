@@ -460,7 +460,7 @@ Responda APENAS com JSON valido (sem markdown):
 
   // Fallback: extrair basico da descricao
   if (!extracted) {
-    const lower = desc = description.toLowerCase();
+    const lower = description.toLowerCase();
     let niche = 'default';
     if (lower.includes('saude') || lower.includes('clinica') || lower.includes('medic') || lower.includes('hospital')) niche = 'saude';
     else if (lower.includes('tecnologia') || lower.includes('software') || lower.includes('sistema') || lower.includes('tech')) niche = 'tecnologia';
