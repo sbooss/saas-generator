@@ -20,11 +20,6 @@ export default function Dashboard() {
     email: '',
     whatsapp: '',
     instagram: '',
-    primaryColor: '#6366f1',
-    secondaryColor: '#8b5cf6',
-    bgColor: '#0a0a0a',
-    textColor: '#ffffff',
-    accentColor: '#22c55e',
     observations: ''
   });
 
@@ -62,9 +57,7 @@ export default function Dashboard() {
         setShowGenerator(false);
         setForm({
           businessName: '', niche: 'saude', description: '', address: '', phone: '', email: '',
-          whatsapp: '', instagram: '',
-          primaryColor: '#6366f1', secondaryColor: '#8b5cf6', bgColor: '#0a0a0a',
-          textColor: '#ffffff', accentColor: '#22c55e', observations: ''
+          whatsapp: '', instagram: '', observations: ''
         });
         setPreviewPage(newPage);
         setShowPreview(true);
@@ -205,32 +198,6 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div style={{marginBottom:'28px'}}>
-                  <label style={{display:'block',marginBottom:'14px',fontSize:'14px',fontWeight:600,color:'#ccc'}}>Cores</label>
-                  <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:'14px'}}>
-                    <div>
-                      <label style={{fontSize:'11px',color:'#666',display:'block',marginBottom:'6px'}}>Principal</label>
-                      <input type="color" value={form.primaryColor} onChange={(e) => setForm({...form, primaryColor: e.target.value})} style={{width:'100%',height:'36px',border:'none',borderRadius:'8px',cursor:'pointer',background:'transparent'}} />
-                    </div>
-                    <div>
-                      <label style={{fontSize:'11px',color:'#666',display:'block',marginBottom:'6px'}}>Secundaria</label>
-                      <input type="color" value={form.secondaryColor} onChange={(e) => setForm({...form, secondaryColor: e.target.value})} style={{width:'100%',height:'36px',border:'none',borderRadius:'8px',cursor:'pointer',background:'transparent'}} />
-                    </div>
-                    <div>
-                      <label style={{fontSize:'11px',color:'#666',display:'block',marginBottom:'6px'}}>Fundo</label>
-                      <input type="color" value={form.bgColor} onChange={(e) => setForm({...form, bgColor: e.target.value})} style={{width:'100%',height:'36px',border:'none',borderRadius:'8px',cursor:'pointer',background:'transparent'}} />
-                    </div>
-                    <div>
-                      <label style={{fontSize:'11px',color:'#666',display:'block',marginBottom:'6px'}}>Texto</label>
-                      <input type="color" value={form.textColor} onChange={(e) => setForm({...form, textColor: e.target.value})} style={{width:'100%',height:'36px',border:'none',borderRadius:'8px',cursor:'pointer',background:'transparent'}} />
-                    </div>
-                    <div>
-                      <label style={{fontSize:'11px',color:'#666',display:'block',marginBottom:'6px'}}>Destaque</label>
-                      <input type="color" value={form.accentColor} onChange={(e) => setForm({...form, accentColor: e.target.value})} style={{width:'100%',height:'36px',border:'none',borderRadius:'8px',cursor:'pointer',background:'transparent'}} />
-                    </div>
-                  </div>
-                </div>
-
                 <div className={styles.formGroup} style={{marginBottom:'28px'}}>
                   <label>Observacoes Extras</label>
                   <textarea rows={3} value={form.observations} onChange={(e) => setForm({...form, observations: e.target.value})} placeholder="Qualquer detalhe adicional: fonte preferida, estilo especifico, referencias de sites que voce gosta, etc." style={{resize:'vertical'}} />
@@ -263,8 +230,23 @@ export default function Dashboard() {
                     <h3 style={{fontSize:'16px',fontWeight:600,marginBottom:'4px',color:'#fff'}}>{page.name}</h3>
                     <p style={{fontSize:'13px',color:'#666',marginBottom:'4px',textTransform:'capitalize'}}>{page.niche}</p>
                     <p style={{fontSize:'12px',color:'#555',marginBottom:'16px'}}>{page.created}</p>
-                    <div style={{display:'flex',gap:'8px'}}>
+                    <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
                       <button className={styles.editBtn} onClick={() => {setPreviewPage(page);setShowPreview(true)}}>Visualizar</button>
+                      <button className={styles.editBtn} onClick={() => {
+                        setForm({
+                          businessName: page.name,
+                          niche: page.niche,
+                          description: page.config?.description || '',
+                          address: page.config?.address || '',
+                          phone: page.config?.phone || '',
+                          email: page.config?.email || '',
+                          whatsapp: page.config?.whatsapp || '',
+                          instagram: page.config?.instagram || '',
+                          observations: page.config?.observations || ''
+                        });
+                        handleDelete(page.id);
+                        setShowGenerator(true);
+                      }}>Regenerar</button>
                       <button className={styles.deleteBtn} onClick={() => handleDelete(page.id)}>Excluir</button>
                     </div>
                   </div>

@@ -20,7 +20,28 @@ function tryOllama(prompt) {
 }
 
 function buildLandingPage(config) {
-  const { businessName, niche, description, address, phone, email, primaryColor, secondaryColor, bgColor, textColor, accentColor, observations } = config;
+  const { businessName, niche, description, address, phone, email, observations } = config;
+
+  // Cores automaticas por nicho
+  const nicheColors = {
+    saude: { primary: '#0ea5e9', secondary: '#06b6d4', bg: '#0c1222', text: '#ffffff', accent: '#22c55e' },
+    tecnologia: { primary: '#6366f1', secondary: '#8b5cf6', bg: '#0a0a0a', text: '#ffffff', accent: '#22c55e' },
+    imobiliario: { primary: '#f59e0b', secondary: '#d97706', bg: '#1a1a1a', text: '#ffffff', accent: '#22c55e' },
+    educacao: { primary: '#3b82f6', secondary: '#2563eb', bg: '#0f172a', text: '#ffffff', accent: '#f59e0b' },
+    advocacia: { primary: '#1e3a5f', secondary: '#2d5a87', bg: '#0d1117', text: '#ffffff', accent: '#c9a227' },
+    restaurant: { primary: '#dc2626', secondary: '#b91c1c', bg: '#1c1917', text: '#ffffff', accent: '#f59e0b' },
+    beleza: { primary: '#ec4899', secondary: '#d946ef', bg: '#1a1025', text: '#ffffff', accent: '#f59e0b' },
+    fitness: { primary: '#22c55e', secondary: '#16a34a', bg: '#0a1a0f', text: '#ffffff', accent: '#f59e0b' },
+    consultoria: { primary: '#6366f1', secondary: '#4f46e5', bg: '#0f0f23', text: '#ffffff', accent: '#22c55e' },
+    default: { primary: '#6366f1', secondary: '#8b5cf6', bg: '#0a0a0a', text: '#ffffff', accent: '#22c55e' }
+  };
+
+  const colors = nicheColors[niche] || nicheColors.default;
+  const primaryColor = config.primaryColor || colors.primary;
+  const secondaryColor = config.secondaryColor || colors.secondary;
+  const bgColor = config.bgColor || colors.bg;
+  const textColor = config.textColor || colors.text;
+  const accentColor = config.accentColor || colors.accent;
 
   const nicheContent = {
     saude: {
