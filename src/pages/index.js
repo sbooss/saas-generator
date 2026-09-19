@@ -224,7 +224,7 @@ export default function SuperLanding() {
               <li><span className={styles.checkIcon}>✓</span> Templates premium</li>
               <li><span className={styles.checkIcon}>✓</span> Suporte prioritario</li>
               <li><span className={styles.checkIcon}>✓</span> Relatorios de acesso</li>
-              <li><span className={styles.checkIcon}>✓</span> Integracao Mercado Pago</li>
+              <li><span className={styles.checkIcon}>✓</span> Dominio personalizado</li>
               <li><span className={styles.checkIcon}>✓</span> A/B Testing</li>
             </ul>
             <button className={styles.planButtonFeatured} onClick={() => handleCTAClick('profissional', 197)}>

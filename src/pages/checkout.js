@@ -12,7 +12,7 @@ export default function Checkout() {
 
   const plans = {
     basico: { price: 97, name: 'Plano Basico', features: ['1 Landing Page', 'Templates prontos', 'Suporte por email'] },
-    profissional: { price: 197, name: 'Plano Profissional', features: ['5 Landing Pages', 'Templates premium', 'Suporte prioritario', 'Relatorios de acesso', 'Integracao Mercado Pago', 'A/B Testing'] },
+    profissional: { price: 197, name: 'Plano Profissional', features: ['5 Landing Pages', 'Templates premium', 'Suporte prioritario', 'Relatorios de acesso', 'Dominio personalizado', 'A/B Testing'] },
     empresarial: { price: 497, name: 'Plano Empresarial', features: ['Landing Pages ilimitadas', 'Templates exclusivos', 'Suporte 24/7', 'API personalizada', 'Consultoria inclusa', 'White Label'] }
   };
 
