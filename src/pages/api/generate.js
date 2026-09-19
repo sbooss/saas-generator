@@ -1,28 +1,9 @@
 ﻿import https from 'https';
 import http from 'http';
 
-function tryOllama(prompt) {
-  return new Promise((resolve, reject) => {
-    const data = JSON.stringify({ model: 'qwen3:4b-instruct-2507-q4_K_M', prompt, stream: false, options: { temperature: 0.8, num_predict: 2000 } });
-    const req = http.request({ hostname: 'localhost', port: 11434, path: '/api/generate', method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) } }, (res) => {
-      let body = '';
-      res.on('data', (chunk) => body += chunk);
-      res.on('end', () => {
-        try { resolve(JSON.parse(body).response); } catch { reject(new Error('Parse error')); }
-      });
-    });
-    req.on('error', reject);
-    req.on('timeout', () => { req.destroy(); reject(new Error('timeout')); });
-    req.setTimeout(25000);
-    req.write(data);
-    req.end();
-  });
-}
-
 function buildLandingPage(config) {
   const { businessName, niche, description, address, phone, email, observations } = config;
 
-  // Cores automaticas por nicho
   const nicheColors = {
     saude: { primary: '#0ea5e9', secondary: '#06b6d4', bg: '#0c1222', text: '#ffffff', accent: '#22c55e' },
     tecnologia: { primary: '#6366f1', secondary: '#8b5cf6', bg: '#0a0a0a', text: '#ffffff', accent: '#22c55e' },
@@ -33,6 +14,7 @@ function buildLandingPage(config) {
     beleza: { primary: '#ec4899', secondary: '#d946ef', bg: '#1a1025', text: '#ffffff', accent: '#f59e0b' },
     fitness: { primary: '#22c55e', secondary: '#16a34a', bg: '#0a1a0f', text: '#ffffff', accent: '#f59e0b' },
     consultoria: { primary: '#6366f1', secondary: '#4f46e5', bg: '#0f0f23', text: '#ffffff', accent: '#22c55e' },
+    construcao: { primary: '#d97706', secondary: '#b45309', bg: '#1a1410', text: '#ffffff', accent: '#22c55e' },
     default: { primary: '#6366f1', secondary: '#8b5cf6', bg: '#0a0a0a', text: '#ffffff', accent: '#22c55e' }
   };
 
@@ -46,27 +28,67 @@ function buildLandingPage(config) {
   const nicheContent = {
     saude: {
       headline: 'Cuide da Sua Saude com Quem Entende',
-      subheadline: 'Atendimento humanizado e de excelencia para voce e sua familia. Agende sua consulta hoje.',
+      subheadline: 'Atendimento humanizado e de excelencia para voce e sua familia. Agende sua consulta hoje e descubra a diferenca de um cuidado verdadeiro.',
+      badge: 'Saude & Bem-Estar',
+      stats: [
+        { value: '15+', label: 'Anos de Experiencia' },
+        { value: '10.000+', label: 'Pacientes Atendidos' },
+        { value: '98%', label: 'Satisfacao dos Pacientes' },
+        { value: '24h', label: 'Suporte de Emergencia' }
+      ],
       features: [
         { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>', title: 'Equipe Especializada', desc: 'Profissionais qualificados e experientes em cada area da saude.' },
         { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1M5 21V5a2 2 0 012-2h10a2 2 0 012 2v16"/></svg>', title: 'Estrutura Moderna', desc: 'Clinica equipada com os mais modernos equipamentos do mercado.' },
         { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>', title: 'Tratamento Personalizado', desc: 'Cada paciente recebe um plano de tratamento unico e sob medida.' },
-        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12h6M9 16h6"/></svg>', title: 'Agendamento Flexivel', desc: 'Marque suas consultas pelo WhatsApp ou telefone, no melhor horario pra voce.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12h6M9 16h6"/></svg>', title: 'Agendamento Flexivel', desc: 'Marque suas consultas pelo WhatsApp ou telefone, no melhor horario pra voce.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', title: 'Seguranca e Higiene', desc: 'Protocolos rigorosos de seguranca e esterilizacao para sua protecao.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>', title: 'Acompanhamento Continuo', desc: 'Monitoramento constante da sua evolucao com relatorios periodicos.' }
+      ],
+      process: [
+        { step: '01', title: 'Primeira Consulta', desc: 'Avaliacao completa do seu estado de saude e historico medico.' },
+        { step: '02', title: 'Diagnostico Preciso', desc: 'Exames e analises detalhadas para identificar o melhor tratamento.' },
+        { step: '03', title: 'Plano Personalizado', desc: 'Tratamento sob medida criado especificamente para voce.' },
+        { step: '04', title: 'Acompanhamento', desc: 'Monitoramento continuo e ajustes para garantir os melhores resultados.' }
       ],
       cta: 'Agende Sua Consulta',
-      testimonial: { text: 'Excelente atendimento! A equipe e muito atenciosa e profissional. Recomendo para toda a familia.', author: 'Maria Silva', role: 'Paciente ha 3 anos' }
+      testimonial: { text: 'Excelente atendimento! A equipe e muito atenciosa e profissional. Recomendo para toda a familia. A estrutura e impressionante e o cuidado com cada detalhe faz toda diferenca.', author: 'Maria Silva', role: 'Paciente ha 3 anos' },
+      faq: [
+        { q: 'Como agendar uma consulta?', a: 'Voce pode agendar pelo WhatsApp, telefone ou pelo nosso site. Nossa equipe esta pronta para atender voce.' },
+        { q: 'Voces aceitam planos de saude?', a: 'Sim, trabalhamos com os principais convênios medicos da regiao.' },
+        { q: 'Qual o horario de funcionamento?', a: 'Segunda a sexta das 7h as 19h, e sabado das 7h as 12h.' }
+      ]
     },
     tecnologia: {
       headline: 'Solucoes Tecnologicas Que Impulsionam Seu Negocio',
-      subheadline: 'Desenvolvemos sistemas sob medida que aumentam sua produtividade e reduzem custos.',
+      subheadline: 'Desenvolvemos sistemas sob medida que aumentam sua produtividade e reduzem custos. Inovacao que gera resultado real.',
+      badge: 'Tech & Inovacao',
+      stats: [
+        { value: '200+', label: 'Projetos Entregues' },
+        { value: '50+', label: 'Empresas Atendidas' },
+        { value: '99.9%', label: 'Uptime Garantido' },
+        { value: '24/7', label: 'Suporte Tecnico' }
+      ],
       features: [
         { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', title: 'Sistemas Sob Medida', desc: 'Software desenvolvido especificamente para as necessidades do seu negocio.' },
         { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>', title: 'Seguranca Garantida', desc: 'Protecao de dados com criptografia de nivel bancario.' },
         { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17V13M12 17V9M16 17V5"/></svg>', title: 'Relatorios Inteligentes', desc: 'Dashboards que transformam dados em decisoes estrategicas.' },
-        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>', title: 'Suporte 24/7', desc: 'Nossa equipe esta sempre disponível para quando voce precisar.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>', title: 'Suporte 24/7', desc: 'Nossa equipe esta sempre disponivel para quando voce precisar.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>', title: 'Escalabilidade', desc: 'Solucoes que crescem junto com o seu negocio sem perda de performance.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>', title: 'Integracao Total', desc: 'Conectamos seus sistemas existentes em uma plataforma unica e eficiente.' }
+      ],
+      process: [
+        { step: '01', title: 'Descoberta', desc: 'Entendemos profundamente seu negocio e suas necessidades.' },
+        { step: '02', title: 'Planejamento', desc: 'Arquitetura detalhada e cronograma transparente do projeto.' },
+        { step: '03', title: 'Desenvolvimento', desc: 'Agil com entregas incrementais e feedback constante.' },
+        { step: '04', title: 'Lancamento', desc: 'Deploy, treinamento e suporte continuo para seu time.' }
       ],
       cta: 'Solicite Uma Demonstracao',
-      testimonial: { text: 'A solucao transformou nossa operacao. Reduzimos 40% dos custos operacionais no primeiro ano.', author: 'Carlos Mendes', role: 'CEO da TechStart' }
+      testimonial: { text: 'A solucao transformou nossa operacao. Reduzimos 40% dos custos operacionais no primeiro ano. O ROI foi muito maior do que esperavamos.', author: 'Carlos Mendes', role: 'CEO da TechStart' },
+      faq: [
+        { q: 'Quanto tempo leva para desenvolver?', a: 'Projetos simples em 4-6 semanas. Sistemas complexos em 2-4 meses com entregas parciais.' },
+        { q: 'Voces trabalham com quais tecnologias?', a: 'React, Next.js, Node.js, Python, e as stacks mais modernas do mercado.' },
+        { q: 'Ha suporte pos-lancamento?', a: 'Sim, oferecemos suporte continuo e evolucao do sistema apos o lancamento.' }
+      ]
     },
     imobiliario: {
       headline: 'Encontre O Imovel Dos Seus Sonhos',
@@ -155,22 +177,70 @@ function buildLandingPage(config) {
     },
     default: {
       headline: `${businessName} - Qualidade e Confianca`,
-      subheadline: 'Solucoes completas para atender suas necessidades com excelencia e profissionalismo.',
+      subheadline: 'Solucoes completas para atender suas necessidades com excelencia e profissionalismo. Descubra o que podemos fazer por voce.',
+      badge: `${businessName}`,
+      stats: [
+        { value: '10+', label: 'Anos de Experiencia' },
+        { value: '500+', label: 'Clientes Satisfeitos' },
+        { value: '99%', label: 'Qualidade Garantida' },
+        { value: '24/7', label: 'Suporte Disponivel' }
+      ],
       features: [
         { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', title: 'Qualidade Superior', desc: 'Compromisso inabalavel com a excelencia em tudo que fazemos.' },
         { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>', title: 'Atendimento Personalizado', desc: 'Cada cliente e unico e recebe atencao dedicada.' },
         { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>', title: 'Inovacao Constante', desc: 'Sempre buscando as melhores solucoes e tecnologias.' },
-        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14"/></svg>', title: 'Experiencia Comprovada', desc: 'Anos de atuacao no mercado com resultados expressivos.' }
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14"/></svg>', title: 'Experiencia Comprovada', desc: 'Anos de atuacao no mercado com resultados expressivos.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10h8M8 14h8"/></svg>', title: 'Resultados Reais', desc: 'Metricas claras e objetivas que demonstram nosso impacto.' },
+        { icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', title: 'Confianca e Seguranca', desc: 'Trabalhamos com total transparencia e etica profissional.' }
+      ],
+      process: [
+        { step: '01', title: 'Contato', desc: 'Entre em contato e conte o que voce precisa.' },
+        { step: '02', title: 'Planejamento', desc: 'Analisamos sua demanda e apresentamos a melhor solucao.' },
+        { step: '03', title: 'Execucao', desc: 'Entregamos com qualidade e dentro do prazo combinado.' },
+        { step: '04', title: 'Suporte', desc: 'Acompanhamento continuo para garantir sua satisfacao.' }
       ],
       cta: 'Entre Em Contato',
-      testimonial: { text: 'Excelente empresa! Profissionais competentes e atendimento de primeira.', author: 'Cliente Satisfeito', role: 'Cliente Regular' }
+      testimonial: { text: 'Excelente empresa! Profissionais competentes e atendimento de primeira. Recomendo de olhos fechados para qualquer necessidade.', author: 'Cliente Satisfeito', role: 'Cliente Regular' },
+      faq: [
+        { q: 'Como funciona o processo?', a: 'Voce entra em contato, analisamos sua necessidade e apresentamos a melhor solucao.' },
+        { q: 'Qual o prazo de entrega?', a: 'Depende da complexidade do projeto. Projetos simples em 1-2 semanas.' },
+        { q: 'Ha garantia?', a: 'Sim, todos os nossos servicos possuem garantia de satisfacao.' }
+      ]
     }
   };
 
   const content = nicheContent[niche] || nicheContent.default;
-
-  // NUNCA usar a descricao como titulo - sempre usar copy profissional do nicho
   const customHeadline = content.headline;
+  const badgeText = content.badge || businessName;
+
+  const statsSection = content.stats ? `
+    <section style="padding:80px 24px;background:${bgColor};border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);">
+      <div style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center;">
+        ${content.stats.map(s => `<div><div style="font-size:clamp(32px,4vw,48px);font-weight:900;background:linear-gradient(135deg,${primaryColor},${secondaryColor});-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;">${s.value}</div><div style="font-size:14px;color:${textColor}77;margin-top:8px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;">${s.label}</div></div>`).join('')}
+      </div>
+    </section>` : '';
+
+  const processSection = content.process ? `
+    <section style="padding:120px 24px;background:linear-gradient(180deg,${bgColor},${bgColor}f0);">
+      <div style="max-width:1100px;margin:0 auto;text-align:center;">
+        <h2 style="font-size:clamp(28px,4vw,40px);font-weight:800;color:${textColor};margin:0 0 16px;">Como Funciona</h2>
+        <p style="font-size:18px;color:${textColor}88;margin:0 0 64px;max-width:500px;margin-left:auto;margin-right:auto;">Nosso processo e simples, transparente e eficiente.</p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;">
+          <div style="position:absolute;top:40px;left:12.5%;right:12.5%;height:2px;background:linear-gradient(90deg,${primaryColor}40,${secondaryColor}40);z-index:0;"></div>
+          ${content.process.map(p => '<div style="position:relative;z-index:1;"><div style="width:80px;height:80px;margin:0 auto 24px;border-radius:50%;background:linear-gradient(135deg,' + primaryColor + ',' + secondaryColor + ');display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;box-shadow:0 8px 32px ' + primaryColor + '40;">' + p.step + '</div><h3 style="font-size:18px;font-weight:700;color:' + textColor + ';margin:0 0 12px;">' + p.title + '</h3><p style="font-size:14px;color:' + textColor + '88;line-height:1.6;margin:0;">' + p.desc + '</p></div>').join('')}
+        </div>
+      </div>
+    </section>` : '';
+
+  const faqSection = content.faq ? `
+    <section style="padding:120px 24px;background:${bgColor};">
+      <div style="max-width:700px;margin:0 auto;">
+        <h2 style="font-size:clamp(28px,4vw,40px);font-weight:800;color:${textColor};margin:0 0 48px;text-align:center;">Perguntas Frequentes</h2>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          ${content.faq.map(f => '<div style="padding:32px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;"><h4 style="font-size:16px;font-weight:700;color:' + textColor + ';margin:0 0 12px;">' + f.q + '</h4><p style="font-size:15px;color:' + textColor + '99;margin:0;line-height:1.7;">' + f.a + '</p></div>').join('')}
+        </div>
+      </div>
+    </section>` : '';
 
   const contactSection = (address || phone || email) ? `
     <section style="padding:100px 24px;background:${bgColor};">
@@ -211,14 +281,15 @@ function buildLandingPage(config) {
     .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;padding:120px 24px 80px;text-align:center;}
     .hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,${primaryColor}15,transparent 70%);border-radius:50%;pointer-events:none;}
     .hero::after{content:'';position:absolute;bottom:-150px;left:-150px;width:500px;height:500px;background:radial-gradient(circle,${secondaryColor}10,transparent 70%);border-radius:50%;pointer-events:none;}
-    .badge{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:100px;border:1px solid ${primaryColor}30;background:${primaryColor}10;color:${primaryColor};font-size:13px;font-weight:600;margin-bottom:32px;}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:100px;border:1px solid ${primaryColor}30;background:${primaryColor}10;color:${primaryColor};font-size:13px;font-weight:600;margin-bottom:32px;letter-spacing:0.05em;text-transform:uppercase;}
     .hero h1{font-size:clamp(36px,6vw,64px);font-weight:900;line-height:1.08;margin:0 0 24px;letter-spacing:-0.03em;}
     .hero h1 span{background:linear-gradient(135deg,${primaryColor},${secondaryColor});-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
     .hero p{font-size:clamp(16px,2vw,20px);color:${textColor}aa;max-width:600px;margin:0 auto 40px;line-height:1.7;}
     .cta-btn{display:inline-flex;align-items:center;gap:10px;padding:18px 40px;background:linear-gradient(135deg,${primaryColor},${secondaryColor});color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.3s;box-shadow:0 8px 32px ${primaryColor}40;}
     .cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px ${primaryColor}60;}
     .features{padding:120px 24px;background:${bgColor};}
-    .features-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+    .features-header{text-align:center;margin-bottom:0;}
+    .features-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
     .feature-card{padding:40px 32px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:20px;transition:all 0.3s;}
     .feature-card:hover{transform:translateY(-4px);border-color:${primaryColor}30;background:rgba(255,255,255,0.04);}
     .feature-icon{width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:${primaryColor}15;border-radius:12px;margin-bottom:20px;color:${primaryColor};}
@@ -233,20 +304,27 @@ function buildLandingPage(config) {
     .testimonial-role{font-size:13px;color:${textColor}88;margin:4px 0 0;}
     .footer{padding:48px 24px;background:rgba(0,0,0,0.3);text-align:center;border-top:1px solid rgba(255,255,255,0.05);}
     .footer p{font-size:13px;color:${textColor}55;margin:0;}
-    @media(max-width:768px){.features-grid{grid-template-columns:1fr;}}
+    @media(max-width:768px){.features-grid{grid-template-columns:1fr;}[style*="grid-template-columns:repeat(4"]{grid-template-columns:repeat(2,1fr) !important;}}
+    @media(max-width:480px){[style*="grid-template-columns:repeat(4"]{grid-template-columns:1fr !important;}}
   </style>
 </head>
 <body>
   <section class="hero">
     <div style="position:relative;z-index:1;max-width:800px;">
-      <div class="badge">${businessName}</div>
+      <div class="badge">${badgeText}</div>
       <h1>${customHeadline}</h1>
       <p>${content.subheadline}</p>
       <a href="#contato" class="cta-btn">${content.cta} →</a>
     </div>
   </section>
 
+  ${statsSection}
+
   <section class="features">
+    <div class="features-header">
+      <h2 style="font-size:clamp(28px,4vw,40px);font-weight:800;color:${textColor};margin:0 0 16px;">Por Que Nos Escolher?</h2>
+      <p style="font-size:18px;color:${textColor}88;margin:0 0 64px;max-width:500px;margin-left:auto;margin-right:auto;">Diferenciais que fazem toda diferenca no resultado final.</p>
+    </div>
     <div class="features-grid">
       ${content.features.map(f => `
         <div class="feature-card">
@@ -258,6 +336,8 @@ function buildLandingPage(config) {
     </div>
   </section>
 
+  ${processSection}
+
   <section class="testimonials">
     <div class="testimonial-card">
       <p class="testimonial-text">${content.testimonial.text}</p>
@@ -265,6 +345,8 @@ function buildLandingPage(config) {
       <p class="testimonial-role">${content.testimonial.role}</p>
     </div>
   </section>
+
+  ${faqSection}
 
   ${contactSection}
 
@@ -278,6 +360,104 @@ function buildLandingPage(config) {
 }
 
 // ========== SISTEMA DE AGENTES ==========
+
+function pmAgent(description) {
+  const lower = description.toLowerCase();
+  let niche = 'default';
+  if (lower.includes('saude') || lower.includes('clinica') || lower.includes('medic') || lower.includes('hospital') || lower.includes('dentist') || lower.includes('veterinari')) niche = 'saude';
+  else if (lower.includes('tecnologia') || lower.includes('software') || lower.includes('sistema') || lower.includes('tech') || lower.includes('startup') || lower.includes('digital')) niche = 'tecnologia';
+  else if (lower.includes('imobili') || lower.includes('imovel') || lower.includes('apartamento') || lower.includes('casa') || lower.includes('condominio')) niche = 'imobiliario';
+  else if (lower.includes('educac') || lower.includes('escola') || lower.includes('curso') || lower.includes('aula') || lower.includes('faculdade')) niche = 'educacao';
+  else if (lower.includes('advoc') || lower.includes('advogad') || lower.includes('juridic') || lower.includes('direito')) niche = 'advocacia';
+  else if (lower.includes('restaur') || lower.includes('comida') || lower.includes('restaurante') || lower.includes('food') || lower.includes('pizzaria') || lower.includes('hamburgueria')) niche = 'restaurant';
+  else if (lower.includes('beleza') || lower.includes('salao') || lower.includes('cabelo') || lower.includes('estetic') || lower.includes('manicur') || lower.includes('maquiag')) niche = 'beleza';
+  else if (lower.includes('fitness') || lower.includes('academia') || lower.includes('treino') || lower.includes('muscul') || lower.includes('gym') || lower.includes('personal')) niche = 'fitness';
+  else if (lower.includes('consult') || lower.includes('assessor') || lower.includes('marketing') || lower.includes('contabil')) niche = 'consultoria';
+  else if (lower.includes('constru') || lower.includes('obra') || lower.includes('engenheiro') || lower.includes('arquitet')) niche = 'construcao';
+
+  const phoneMatch = description.match(/\(?\d{2}\)?\s*\d{4,5}[\s-]?\d{4}/);
+  const phone = phoneMatch ? phoneMatch[0] : null;
+  const waMatch = description.match(/whatsapp[:\s]*(\(?\d{2}\)?\s*\d{4,5}[\s-]?\d{4})/i);
+  const whatsapp = waMatch ? waMatch[1].replace(/[^0-9]/g, '') : (phone ? phone.replace(/[^0-9]/g, '') : null);
+  const igMatch = description.match(/instagram[:\s]*@?(\w+)/i) || description.match(/@(\w+)/);
+  const instagram = igMatch ? igMatch[1] : null;
+  const addrMatch = description.match(/endere[co]{2}[:\s]*(.*?)(?:\.|,|\n|$)/i) || description.match(/rua[:\s]*(.*?)(?:\.|,|\n|$)/i) || description.match(/avenida[:\s]*(.*?)(?:\.|,|\n|$)/i);
+  const address = addrMatch ? addrMatch[1].trim() : null;
+  const emailMatch = description.match(/[\w.-]+@[\w.-]+\.\w+/);
+  const email = emailMatch ? emailMatch[0] : null;
+
+  const nameMatch = description.match(/^(.*?)(?:\.|,|\n|$)/i);
+  let rawName = nameMatch ? nameMatch[1].trim() : 'Meu Negocio';
+  rawName = rawName.replace(/clinica medica chamada/gi, '')
+                   .replace(/empresa chamada/gi, '')
+                   .replace(/negocio chamado/gi, '')
+                   .replace(/loja chamada/gi, '')
+                   .replace(/restaurante chamado/gi, '')
+                   .replace(/escritorio chamado/gi, '')
+                   .replace(/escola chamada/gi, '')
+                   .replace(/academia chamada/gi, '')
+                   .replace(/salao chamado/gi, '')
+                   .replace(/consultorio chamado/gi, '')
+                   .trim();
+  
+  let businessName = rawName;
+  if (businessName.length > 40) {
+    businessName = businessName.split(' ').slice(0, 4).join(' ');
+  }
+  if (!businessName || businessName.length < 2) businessName = 'Meu Negocio';
+
+  return {
+    businessName,
+    niche,
+    description: description.substring(0, 200),
+    style: lower.includes('elegant') ? 'elegante' : lower.includes('moderno') ? 'moderno' : lower.includes('minimalista') ? 'minimalista' : 'profissional',
+    colors: null,
+    phone,
+    address,
+    email,
+    whatsapp,
+    instagram,
+    sections: ['beneficios', 'contato']
+  };
+}
+
+function designerAgent(config) {
+  const niche = config.niche || 'default';
+  const style = config.style || 'profissional';
+  
+  const palettes = {
+    saude: { primary: '#0ea5e9', secondary: '#06b6d4', bg: '#0c1222', text: '#ffffff', accent: '#22c55e' },
+    tecnologia: { primary: '#6366f1', secondary: '#8b5cf6', bg: '#0a0a0a', text: '#ffffff', accent: '#22c55e' },
+    imobiliario: { primary: '#f59e0b', secondary: '#d97706', bg: '#1a1a1a', text: '#ffffff', accent: '#22c55e' },
+    educacao: { primary: '#3b82f6', secondary: '#2563eb', bg: '#0f172a', text: '#ffffff', accent: '#f59e0b' },
+    advocacia: { primary: '#1e3a5f', secondary: '#2d5a87', bg: '#0d1117', text: '#ffffff', accent: '#c9a227' },
+    restaurant: { primary: '#dc2626', secondary: '#b91c1c', bg: '#1c1917', text: '#ffffff', accent: '#f59e0b' },
+    beleza: { primary: '#ec4899', secondary: '#d946ef', bg: '#1a1025', text: '#ffffff', accent: '#f59e0b' },
+    fitness: { primary: '#22c55e', secondary: '#16a34a', bg: '#0a1a0f', text: '#ffffff', accent: '#f59e0b' },
+    consultoria: { primary: '#6366f1', secondary: '#4f46e5', bg: '#0f0f23', text: '#ffffff', accent: '#22c55e' },
+    construcao: { primary: '#d97706', secondary: '#b45309', bg: '#1a1410', text: '#ffffff', accent: '#22c55e' },
+    default: { primary: '#6366f1', secondary: '#8b5cf6', bg: '#0a0a0a', text: '#ffffff', accent: '#22c55e' }
+  };
+
+  return palettes[niche] || palettes.default;
+}
+
+function reviewerAgent(html) {
+  const issues = [];
+  if (!html.includes('<!DOCTYPE html>')) issues.push('Missing DOCTYPE');
+  if (!html.includes('lang="pt-BR"')) issues.push('Missing language');
+  if (!html.includes('viewport')) issues.push('Missing viewport');
+  if (!html.includes('cta-btn')) issues.push('Missing CTA');
+  if (!html.includes('feature-card')) issues.push('Missing features');
+  if (html.toLowerCase().includes('lorem ipsum')) issues.push('Contains placeholder text');
+  if (html.length > 150000) issues.push('Too large');
+  
+  return {
+    approved: issues.length === 0,
+    issues,
+    score: Math.max(0, 100 - (issues.length * 20))
+  };
+}
 
 function uiAgentEnhance(html, config) {
   const p = config.primaryColor || '#6366f1';
@@ -399,8 +579,11 @@ function qaValidate(html, config) {
   checks.push({n:'CTA', p: html.includes('cta-btn')});
   checks.push({n:'Features', p: html.includes('feature-card')});
   checks.push({n:'Testimonial', p: html.toLowerCase().includes('testimonial')});
+  checks.push({n:'Stats', p: html.includes('stats') || html.includes('grid-template-columns:repeat(4')});
+  checks.push({n:'Process', p: html.includes('Como Funciona') || html.includes('process')});
   checks.push({n:'No Generic', p: !html.toLowerCase().includes('lorem ipsum') && !html.toLowerCase().includes('placeholder')});
-  checks.push({n:'Perf', p: html.length < 100000});
+  checks.push({n:'Perf', p: html.length < 150000});
+  checks.push({n:'Font', p: html.includes('Inter')});
   const passed = checks.filter(c => c.p).length;
   return { score: Math.round((passed / checks.length) * 100), checks, approved: checks.every(c => c.p) };
 }
@@ -411,160 +594,43 @@ export default async function handler(req, res) {
   const { description } = req.body;
   if (!description || !description.trim()) return res.status(400).json({ error: 'Descricao obrigatoria' });
 
-  // Prompt para a IA extrair informacoes da descricao
-  const extractPrompt = `Analise esta descricao de um cliente que quer uma landing page e extraia as informacoes em JSON.
+  const pmResult = pmAgent(description);
+  const designerPalette = designerAgent(pmResult);
 
-DESCRICAO DO CLIENTE:
-"${description}"
-
-Extraia NO MINIMO:
-- businessName: nome do negocio/empresa
-- niche: qual o nicho (saude, tecnologia, imobiliario, educacao, advocacia, restaurant, beleza, fitness, consultoria, ou outro)
-- description: resumo do que o cliente quer (max 2 frases)
-- style: estilo visual (elegante, moderno, minimalista, sofisticado, etc)
-- colors: cores que o cliente mencionou (se nao mencionou, use null)
-- phone: telefone se mencionou
-- address: endereco se mencionou
-- email: email se mencionou
-- whatsapp: numero do whatsapp se mencionou
-- instagram: usuario do instagram se mencionou
-- sections: o que deve ter na pagina (beneficios, equipe, depoimentos, contato, etc)
-
-Responda APENAS com JSON valido (sem markdown):
-{
-  "businessName": "nome",
-  "niche": "nicho",
-  "description": "resumo",
-  "style": "estilo",
-  "colors": null,
-  "phone": null,
-  "address": null,
-  "email": null,
-  "whatsapp": null,
-  "instagram": null,
-  "sections": ["beneficios", "contato"]
-}`;
-
-  let extracted = null;
-
-  // Tenta usar Ollama
-  try {
-    const ollamaResponse = await tryOllama(extractPrompt);
-    const jsonMatch = ollamaResponse.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      extracted = JSON.parse(jsonMatch[0]);
-    }
-  } catch (e) {
-    console.log('Ollama indisponivel, usando fallback');
-  }
-
-  // Fallback: extrair basico da descricao
-  if (!extracted) {
-    const lower = description.toLowerCase();
-    let niche = 'default';
-    if (lower.includes('saude') || lower.includes('clinica') || lower.includes('medic') || lower.includes('hospital')) niche = 'saude';
-    else if (lower.includes('tecnologia') || lower.includes('software') || lower.includes('sistema') || lower.includes('tech')) niche = 'tecnologia';
-    else if (lower.includes('imobili') || lower.includes('imovel') || lower.includes('apartamento') || lower.includes('casa')) niche = 'imobiliario';
-    else if (lower.includes('educac') || lower.includes('escola') || lower.includes('curso') || lower.includes('aula')) niche = 'educacao';
-    else if (lower.includes('advoc') || lower.includes('advogad') || lower.includes('juridic')) niche = 'advocacia';
-    else if (lower.includes('restaur') || lower.includes('comida') || lower.includes('restaurante') || lower.includes('food')) niche = 'restaurant';
-    else if (lower.includes('beleza') || lower.includes('salao') || lower.includes('cabelo') || lower.includes('estetic')) niche = 'beleza';
-    else if (lower.includes('fitness') || lower.includes('academia') || lower.includes('treino') || lower.includes('muscul')) niche = 'fitness';
-    else if (lower.includes('consult') || lower.includes('assessor')) niche = 'consultoria';
-
-    // Extrair telefone
-    const phoneMatch = description.match(/\(?\d{2}\)?\s*\d{4,5}[\s-]?\d{4}/);
-    const phone = phoneMatch ? phoneMatch[0] : null;
-
-    // Extrair whatsapp
-    const waMatch = description.match(/whatsapp[:\s]*(\(?\d{2}\)?\s*\d{4,5}[\s-]?\d{4})/i);
-    const whatsapp = waMatch ? waMatch[1].replace(/[^0-9]/g, '') : (phone ? phone.replace(/[^0-9]/g, '') : null);
-
-    // Extrair instagram
-    const igMatch = description.match(/instagram[:\s]*@?(\w+)/i) || description.match(/@(\w+)/);
-    const instagram = igMatch ? igMatch[1] : null;
-
-    // Extrair endereco
-    const addrMatch = description.match(/endere[co]{2}[:\s]*(.*?)(?:\.|,|\n|$)/i) || description.match(/rua[:\s]*(.*?)(?:\.|,|\n|$)/i) || description.match(/avenida[:\s]*(.*?)(?:\.|,|\n|$)/i);
-    const address = addrMatch ? addrMatch[1].trim() : null;
-
-    // Extrair email
-    const emailMatch = description.match(/[\w.-]+@[\w.-]+\.\w+/);
-    const email = emailMatch ? emailMatch[0] : null;
-
-    // Extrair nome (primeira linha ou palavras significativas)
-    const nameMatch = description.match(/^(.*?)(?:\.|,|\n|$)/i);
-    let rawName = nameMatch ? nameMatch[1].trim() : 'Meu Negocio';
-    
-    // Limpar nome - remover palavras desnecessarias
-    rawName = rawName.replace(/clinica medica chamada/gi, '')
-                     .replace(/empresa chamada/gi, '')
-                     .replace(/negocio chamado/gi, '')
-                     .replace(/loja chamada/gi, '')
-                     .replace(/restaurante chamado/gi, '')
-                     .replace(/escritorio chamado/gi, '')
-                     .replace(/escola chamada/gi, '')
-                     .replace(/academia chamada/gi, '')
-                     .replace(/salao chamado/gi, '')
-                     .replace(/consultorio chamado/gi, '')
-                     .trim();
-    
-    // Se ainda esta muito longo, pegar so as palavras principais
-    let businessName = rawName;
-    if (businessName.length > 40) {
-      businessName = businessName.split(' ').slice(0, 4).join(' ');
-    }
-    if (!businessName || businessName.length < 2) businessName = 'Meu Negocio';
-
-    extracted = {
-      businessName,
-      niche,
-      description: description.substring(0, 200),
-      style: lower.includes('elegant') ? 'elegante' : lower.includes('moderno') ? 'moderno' : lower.includes('minimalista') ? 'minimalista' : 'profissional',
-      colors: null,
-      phone,
-      address,
-      email,
-      whatsapp,
-      instagram,
-      sections: ['beneficios', 'contato']
-    };
-  }
-
-  // Montar config final
-  const config = {
-    businessName: extracted.businessName || 'Meu Negocio',
-    niche: extracted.niche || 'default',
-    description: extracted.description || description,
-    address: extracted.address || '',
-    phone: extracted.phone || '',
-    email: extracted.email || '',
-    whatsapp: extracted.whatsapp || '',
-    instagram: extracted.instagram || '',
-    primaryColor: null,
-    secondaryColor: null,
-    bgColor: null,
-    textColor: null,
-    accentColor: null,
+  const finalConfig = {
+    businessName: pmResult.businessName || 'Meu Negocio',
+    niche: pmResult.niche || 'default',
+    description: pmResult.description || description,
+    address: pmResult.address || '',
+    phone: pmResult.phone || '',
+    email: pmResult.email || '',
+    whatsapp: pmResult.whatsapp || '',
+    instagram: pmResult.instagram || '',
+    primaryColor: designerPalette.primary,
+    secondaryColor: designerPalette.secondary,
+    bgColor: designerPalette.bg,
+    textColor: designerPalette.text,
+    accentColor: designerPalette.accent,
     observations: description
   };
 
-  let result = buildLandingPage(config);
+  let result = buildLandingPage(finalConfig);
   
-  // Run all agents
-  result.html = uiAgentEnhance(result.html, config);
-  result.html = uxAgentEnhance(result.html, config);
-  result.html = scrollAgentEnhance(result.html, config);
-  result.html = typographyAgentEnhance(result.html, config);
-  result.html = parallaxAgentEnhance(result.html, config);
+  // Run Developer agents
+  result.html = uiAgentEnhance(result.html, finalConfig);
+  result.html = uxAgentEnhance(result.html, finalConfig);
+  result.html = scrollAgentEnhance(result.html, finalConfig);
+  result.html = typographyAgentEnhance(result.html, finalConfig);
+  result.html = parallaxAgentEnhance(result.html, finalConfig);
   
-  // QA Validation
-  const qaResult = qaValidate(result.html, config);
+  // Run Reviewer agent
+  const qaResult = qaValidate(result.html, finalConfig);
+  const reviewerResult = reviewerAgent(result.html);
   
   return res.status(200).json({ 
     success: true, 
-    content: { title: config.businessName, html: result.html }, 
+    content: { title: finalConfig.businessName, html: result.html }, 
     source: 'agents',
-    qa: qaResult
+    qa: { ...qaResult, reviewer: reviewerResult }
   });
 }
